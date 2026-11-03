@@ -18,3 +18,5 @@ Cada pessoa usa sua própria conta. Os dados são vinculados ao usuário e ao es
 
 ## Primeira versão
 Autenticação, criação do espaço, diário alimentar, água, treinos com séries/repetições/carga, hábitos, sono, medidas e registro intestinal. Próximas etapas: convite de membro, gráficos, lembretes recorrentes e testes completos em celular.
+
+Exercise data by [RepDB](https://repdb.co). Free tier attribution is required; use is permitted inside the app, not as a redistributed dataset or API.
