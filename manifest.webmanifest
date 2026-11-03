@@ -1,0 +1,18 @@
+{
+  "name": "Meu Acompanhamento",
+  "short_name": "Acompanhar",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f7fc",
+  "theme_color": "#7257df",
+  "description": "Treinos, alimentação, hidratação e evolução",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
