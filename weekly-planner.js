@@ -105,7 +105,7 @@ function mealCard(m) {
   const mine = m.user_id === currentUser.id;
   const foods = (m.foods || []).map(f => '<li>' + esc(f.food) +
     (f.quantity != null ? ' — ' + esc(f.quantity) + ' ' + esc(f.unit || '') : '') + '</li>').join('');
-  return '<article class="weekly-meal"><div class="weekly-meal-head"><b>' + esc(m.meal_name) +
+  return '<article class="weekly-meal" data-weekly-meal="' + m.id + '"><div class="weekly-meal-head"><b>' + esc(m.meal_name) +
     '</b><span>' + esc(String(m.meal_time || '').slice(0,5)) + '</span></div>' +
     '<ul>' + foods + '</ul>' + (m.notes ? '<small>' + esc(m.notes) + '</small>' : '') +
     '<footer>' + (mine ? 'Seu cardápio' : 'Cardápio do outro membro') +
@@ -151,22 +151,46 @@ function renderTasks() {
 function renderHome() {
   const host = $('weekly-home-card');
   if (!host || !currentUser) return;
-  const today = mondayIndex(new Date());
+  const now = new Date();
+  const today = mondayIndex(now);
   const tomorrow = (today + 1) % 7;
-  const todayMeals = mealsCache.filter(m => m.user_id === currentUser.id && Number(m.day_of_week) === today);
-  const tomorrowMeals = mealsCache.filter(m => m.user_id === currentUser.id && Number(m.day_of_week) === tomorrow);
-  const prepDate = weekDate(tomorrow);
-  const prep = tasksCache.filter(t => t.task_date === prepDate);
-  const summary = list => list.length ? list.map(m =>
-    '<div class="weekly-home-row"><b>' + esc(String(m.meal_time||'').slice(0,5)) + ' · ' + esc(m.meal_name) +
-    '</b><small>' + esc(foodText(m.foods)) + '</small></div>').join('') :
-    '<p class="muted small">Ainda não há refeições cadastradas.</p>';
-  host.innerHTML = '<div class="weekly-home-top"><div><p class="eyebrow">PLANEJAMENTO ALIMENTAR</p><h3>Hoje · ' + dayName(today) + '</h3></div><span>🍱</span></div>' +
-    summary(todayMeals) + '<div class="weekly-tomorrow"><b>Prepare-se para amanhã · ' + dayName(tomorrow) + '</b>' +
-    summary(tomorrowMeals) +
-    (prep.length ? '<p class="small"><b>Preparos:</b> ' + prep.filter(t=>!t.is_done).length + ' pendente(s)</p>' : '<p class="muted small">Consulte o cardápio de amanhã e organize o preparo.</p>') +
-    '<button class="secondary wide" type="button" id="open-weekly-planner">Ver semana e preparar amanhã</button></div>';
-  $('open-weekly-planner')?.addEventListener('click', () => document.querySelector('[data-page="weekly"]')?.click());
+  const todayMeals = mealsCache
+    .filter(m => m.user_id === currentUser.id && Number(m.day_of_week) === today)
+    .sort((a,b) => String(a.meal_time || '').localeCompare(String(b.meal_time || '')));
+  const minuteNow = now.getHours() * 60 + now.getMinutes();
+  const currentMeal = todayMeals.filter(m => {
+    const [h, min] = String(m.meal_time || '00:00').slice(0,5).split(':').map(Number);
+    return h * 60 + min <= minuteNow;
+  }).at(-1) || todayMeals[0];
+  const tomorrowSnack = mealsCache.find(m =>
+    m.user_id === currentUser.id && Number(m.day_of_week) === tomorrow &&
+    /lanche/i.test(m.meal_name || '')
+  );
+  const prep = tasksCache.filter(t => t.task_date === weekDate(tomorrow) && !t.is_done);
+  const foodsHtml = m => (m.foods || []).map(f =>
+    '<li>' + esc(f.food) + (f.quantity != null ? ' — ' + esc(f.quantity) + ' ' + esc(f.unit || '') : '') + '</li>'
+  ).join('');
+  host.innerHTML =
+    '<div class="weekly-home-top"><div><p class="eyebrow">SUA ALIMENTAÇÃO AGORA</p><h3>Hoje · ' + dayName(today) + '</h3></div><span>🍽️</span></div>' +
+    (currentMeal
+      ? '<article class="home-current-meal"><div class="home-current-head"><span>' + esc(String(currentMeal.meal_time || '').slice(0,5)) + '</span><b>' + esc(currentMeal.meal_name) + '</b></div><ul>' + foodsHtml(currentMeal) + '</ul><small>Refeição prevista para este horário</small></article>'
+      : '<p class="muted small">Nenhuma refeição cadastrada para hoje.</p>') +
+    '<div class="weekly-tomorrow"><b>🔔 Deixe o lanche de amanhã preparado</b>' +
+    (tomorrowSnack
+      ? '<p class="small">' + esc(dayName(tomorrow)) + ' · ' + esc(String(tomorrowSnack.meal_time || '').slice(0,5)) + ' — ' + esc(tomorrowSnack.meal_name) + '</p><p class="muted small">' + esc(foodText(tomorrowSnack.foods)) + '</p><button class="secondary wide" type="button" id="open-tomorrow-snack">Ver lanche completo e preparo</button>'
+      : '<p class="muted small">Cadastre o lanche de amanhã no planejamento para receber o atalho com os alimentos e quantidades.</p><button class="secondary wide" type="button" id="open-tomorrow-snack">Abrir planejamento de amanhã</button>') +
+    (prep.length ? '<p class="small"><b>Preparos pendentes:</b> ' + prep.length + '</p>' : '') +
+    '</div>';
+  $('open-tomorrow-snack')?.addEventListener('click', () => {
+    $('weekly-day').value = String(tomorrow);
+    selectedDay = tomorrow;
+    document.querySelector('[data-page="weekly"]')?.click();
+    renderSelectedDay();
+    setTimeout(() => {
+      const target = tomorrowSnack && document.querySelector('[data-weekly-meal="' + tomorrowSnack.id + '"]');
+      (target || $('weekly-day-content'))?.scrollIntoView({behavior:'smooth',block:'center'});
+    }, 150);
+  });
 }
 $('weekly-day')?.addEventListener('change',renderSelectedDay);
 $('weekly-meal-form')?.addEventListener('submit',async e=>{
