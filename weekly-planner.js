@@ -158,10 +158,18 @@ function renderHome() {
     .filter(m => m.user_id === currentUser.id && Number(m.day_of_week) === today)
     .sort((a,b) => String(a.meal_time || '').localeCompare(String(b.meal_time || '')));
   const minuteNow = now.getHours() * 60 + now.getMinutes();
-  const currentMeal = todayMeals.filter(m => {
+  const mealMinutes = m => {
     const [h, min] = String(m.meal_time || '00:00').slice(0,5).split(':').map(Number);
-    return h * 60 + min <= minuteNow;
-  }).at(-1) || todayMeals[0];
+    return h * 60 + min;
+  };
+  const previousMeal = todayMeals.filter(m => mealMinutes(m) <= minuteNow).at(-1);
+  const nextMeal = todayMeals.find(m => mealMinutes(m) > minuteNow);
+  // Se faltar até 30 minutos, antecipa a próxima refeição no painel.
+  const showNextMeal = nextMeal && mealMinutes(nextMeal) - minuteNow <= 30;
+  const currentMeal = showNextMeal ? nextMeal : (previousMeal || todayMeals[0]);
+  const mealStatus = showNextMeal
+    ? 'Próxima refeição em ' + (mealMinutes(nextMeal) - minuteNow) + ' min'
+    : (previousMeal ? 'Refeição prevista para este horário' : 'Primeira refeição do dia');
   const tomorrowSnack = mealsCache.find(m =>
     m.user_id === currentUser.id && Number(m.day_of_week) === tomorrow &&
     /lanche/i.test(m.meal_name || '')
@@ -173,7 +181,7 @@ function renderHome() {
   host.innerHTML =
     '<div class="weekly-home-top"><div><p class="eyebrow">SUA ALIMENTAÇÃO AGORA</p><h3>Hoje · ' + dayName(today) + '</h3></div><span>🍽️</span></div>' +
     (currentMeal
-      ? '<article class="home-current-meal"><div class="home-current-head"><span>' + esc(String(currentMeal.meal_time || '').slice(0,5)) + '</span><b>' + esc(currentMeal.meal_name) + '</b></div><ul>' + foodsHtml(currentMeal) + '</ul><small>Refeição prevista para este horário</small></article>'
+      ? '<article class="home-current-meal"><div class="home-current-head"><span>' + esc(String(currentMeal.meal_time || '').slice(0,5)) + '</span><b>' + esc(currentMeal.meal_name) + '</b></div><ul>' + foodsHtml(currentMeal) + '</ul><small>' + mealStatus + '</small></article>'
       : '<p class="muted small">Nenhuma refeição cadastrada para hoje.</p>') +
     '<div class="weekly-tomorrow"><b>🔔 Deixe o lanche de amanhã preparado</b>' +
     (tomorrowSnack
@@ -221,6 +229,8 @@ $('weekly-task-form')?.addEventListener('submit',async e=>{
   } catch (err) { toast(err.message); }
 });
 document.querySelectorAll('[data-page="weekly"]').forEach(btn => btn.addEventListener('click',()=>setTimeout(()=>renderSelectedDay(),0)));
+// Reavalia o horário enquanto o painel permanece aberto.
+setInterval(renderHome, 30000);
 supabase.auth.onAuthStateChange((_event,session)=>{
   currentUser = session?.user || null;
   if (currentUser) resolveSpace().catch(err=>{
