@@ -80,6 +80,8 @@ async function resolveSpace() {
   }
   menuId = menu.id;
   $('weekly-week-label').value = weekLabel();
+  $('weekly-day').value = String(mondayIndex(new Date()));
+  $('weekly-task-date').value = localISO(new Date());
   $('weekly-status').textContent = 'Semana de ' + weekLabel() + ' · cardápio compartilhado do espaço.';
   await refreshData();
 }
