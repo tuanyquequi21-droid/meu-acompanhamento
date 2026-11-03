@@ -72,3 +72,67 @@ nav{background:#ffffffed;border-top:1px solid #e8e8eb;backdrop-filter:blur(14px)
 .weekly-tomorrow> b{display:block;font-size:13px}
 .weekly-tomorrow>p{line-height:1.55}
 .weekly-meal[data-weekly-meal]{scroll-margin:120px}
+
+
+/* Navegação inferior: barra flutuante mais leve e confortável */
+nav{
+  left:12px;
+  right:12px;
+  bottom:calc(10px + env(safe-area-inset-bottom));
+  width:auto;
+  max-width:620px;
+  margin:0 auto;
+  min-height:66px;
+  padding:7px 8px;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  align-items:center;
+  gap:3px;
+  background:rgba(255,255,255,.96);
+  border:1px solid #eceaf2;
+  border-radius:20px;
+  box-shadow:0 8px 30px rgba(35,27,65,.13);
+  backdrop-filter:blur(16px);
+}
+nav button{
+  min-width:0;
+  min-height:52px;
+  padding:5px 2px;
+  border:0;
+  border-radius:14px;
+  gap:3px;
+  color:#8b8997;
+  font-size:9px;
+  font-weight:700;
+  line-height:1.1;
+  white-space:nowrap;
+  transition:background .18s ease,color .18s ease;
+}
+nav button span{
+  width:27px;
+  height:25px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  font-size:18px;
+  line-height:1;
+}
+nav button.current{
+  color:#5d49bd;
+  background:#f1edff;
+}
+nav button.current span{
+  background:#e5defe;
+  color:#5d49bd;
+}
+main{padding-bottom:112px}
+@media(min-width:650px){
+  nav{
+    left:50%;
+    right:auto;
+    width:min(620px,calc(100% - 32px));
+    transform:translateX(-50%);
+    border:1px solid #eceaf2;
+    border-radius:20px;
+  }
+}
