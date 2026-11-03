@@ -11,3 +11,34 @@
 .diet-edit-btn{margin:4px 0 10px}.diet-editor{margin-top:12px}.diet-editor textarea{min-height:190px;font-family:inherit;line-height:1.6}.diet-editor .two button{min-width:0}
 
 .weekly-home{border:1px solid #d8d8d8}.weekly-home-top{display:flex;align-items:center;justify-content:space-between}.weekly-home-top h3{margin:2px 0 10px}.weekly-home-top span{font-size:25px}.weekly-home-row{padding:8px 0;border-bottom:1px solid var(--line)}.weekly-home-row b{display:block;font-size:12px}.weekly-home-row small{display:block;color:var(--muted);font-size:11px;margin-top:4px}.weekly-tomorrow{background:#f3f3f3;border-radius:13px;padding:13px;margin-top:13px}.weekly-tomorrow> b{font-size:12px}.weekly-meal{border:1px solid var(--line);border-radius:12px;padding:12px;margin:9px 0}.weekly-meal-head{display:flex;justify-content:space-between;gap:12px}.weekly-meal-head b{font-size:13px}.weekly-meal-head span{font-size:11px;font-weight:800}.weekly-meal ul{padding-left:18px;margin:8px 0}.weekly-meal li{font-size:12px;line-height:1.7}.weekly-meal small{color:var(--muted);font-size:11px}.weekly-meal footer{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:10px;margin-top:8px}.weekly-meal h4{margin:14px 0 7px}.text-btn{border:0;background:transparent;text-decoration:underline;font-size:10px;color:#555}.weekly-task{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);margin:0}.weekly-task input{width:18px;min-height:18px;margin:0;accent-color:#111}.weekly-task span{display:flex;flex-direction:column;gap:3px}.weekly-task b{font-size:12px}.weekly-task small{font-size:10px;color:var(--muted)}
+
+/* Hierarquia visual e navegação simplificada */
+:root{--ink:#202124;--muted:#777b83;--line:#e8e9ec;--bg:#f7f7f8}
+body{background:var(--bg);color:var(--ink)}
+header{height:72px;padding:0 max(20px,calc((100vw - 980px)/2));background:#fff}
+header b{font-size:15px}
+main{max-width:980px;padding:28px 22px 112px}
+.page>h2{font-size:29px;letter-spacing:-.8px;margin:3px 0 6px}
+.page>.eyebrow{margin:0 0 8px;color:#777}
+.card{border-color:#ececef;border-radius:16px;box-shadow:0 3px 14px #17171708;padding:20px}
+.stats{gap:13px;margin:22px 0 28px}
+.stat{background:#fff!important;border:1px solid #ececef;border-radius:15px;min-height:112px;padding:17px}
+.stat span{font-weight:600;color:#747780}.stat b{font-size:28px;color:#202124}
+.shortcuts{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0 24px}
+.shortcuts button{min-height:122px;border-radius:15px;padding:16px;border-color:#ececef;box-shadow:0 3px 12px #17171706}
+.shortcut-icon{width:34px;height:34px;border-radius:11px;background:#f0f0f1;display:grid;place-items:center;font-size:20px;color:#252525}
+.shortcuts b{font-size:13px;margin-top:3px}.shortcuts small{font-size:11px;line-height:1.4}
+.section-heading{display:flex;align-items:end;justify-content:space-between;margin:28px 2px 8px}
+.section-heading h3{font-size:18px;margin:0;letter-spacing:-.35px}.section-heading .eyebrow{margin:0 0 5px}
+.weekly-home{padding:21px;border-color:#e6e6e8}.weekly-home-top h3{font-size:19px}
+.weekly-tomorrow{background:#f6f6f7;border:1px solid #ededee}
+.primary{background:#202124}.secondary{background:#f0f0f1;color:#242424}
+input,select,textarea{background:#fff;border-color:#e5e6e9;border-radius:11px}
+input:focus,select:focus,textarea:focus{border-color:#777;box-shadow:0 0 0 3px #2222220c}
+nav{gap:6px;justify-content:center;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:#fffffff2;border-top:1px solid #e9e9eb}
+nav button{min-width:64px;max-width:110px;flex:1;color:#85878c;font-size:10px;padding:4px 2px}
+nav button span{font-size:19px;height:22px}nav button.current{color:#171717}
+nav button.current span{background:#eeeeef;border-radius:9px;padding:2px 13px}
+.weekly-meal{border-color:#ededee;border-radius:13px;padding:15px}.weekly-task{padding:14px 2px}
+@media(min-width:760px){main{padding-top:34px;padding-bottom:55px}nav{position:sticky;top:72px;bottom:auto;max-width:980px;margin:0 auto 8px;border:0;border-bottom:1px solid #e9e9eb;border-radius:0;padding:0 18px;background:#ffffffed;justify-content:flex-start;z-index:5}nav button{flex:0 0 auto;min-width:100px;flex-direction:row;justify-content:center;gap:8px;padding:14px 15px;font-size:12px}nav button.current span{background:transparent;padding:0}}
+@media(max-width:560px){main{padding:22px 14px 105px}.shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.shortcuts button{min-height:112px}.stats{gap:9px}.stat{min-height:104px;padding:13px}.stat b{font-size:25px}.page>h2{font-size:25px}nav button{min-width:0;font-size:9px}}
