@@ -46,7 +46,7 @@ function foodText(foods = []) {
 }
 function parseFoods(value) {
   return value.split(';').map(x => x.trim()).filter(Boolean).map(line => {
-    const m = line.match(/^(.*?)(?:\\s+(\\d+(?:[.,]\\d+)?))?(?:\\s*(g|kg|ml|un|unidade|unidades|porção|porções))?$/i);
+    const m = line.match(/^(.*?)(?:\s+(\d+(?:[.,]\d+)?))?(?:\s*(g|kg|ml|un|unidade|unidades|porção|porções))?$/i);
     return { food: m[1].trim(), quantity: m[2] ? Number(m[2].replace(',','.')) : null, unit: m[3] || null };
   });
 }
