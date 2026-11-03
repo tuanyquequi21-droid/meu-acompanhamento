@@ -164,12 +164,19 @@ function renderHome() {
   };
   const previousMeal = todayMeals.filter(m => mealMinutes(m) <= minuteNow).at(-1);
   const nextMeal = todayMeals.find(m => mealMinutes(m) > minuteNow);
-  // Se faltar até 30 minutos, antecipa a próxima refeição no painel.
-  const showNextMeal = nextMeal && mealMinutes(nextMeal) - minuteNow <= 30;
-  const currentMeal = showNextMeal ? nextMeal : (previousMeal || todayMeals[0]);
-  const mealStatus = showNextMeal
-    ? 'Próxima refeição em ' + (mealMinutes(nextMeal) - minuteNow) + ' min'
-    : (previousMeal ? 'Refeição prevista para este horário' : 'Primeira refeição do dia');
+  // Cada refeição representa um período: a próxima assume quando passa
+  // o ponto médio entre os horários, evitando manter o almoço até a noite.
+  const previousTime = previousMeal ? mealMinutes(previousMeal) : null;
+  const nextTime = nextMeal ? mealMinutes(nextMeal) : null;
+  const switchToNext = previousMeal && nextMeal
+    ? minuteNow >= previousTime + (nextTime - previousTime) / 2
+    : !previousMeal && nextMeal;
+  const currentMeal = switchToNext ? nextMeal : (previousMeal || nextMeal || todayMeals[0]);
+  const mealStatus = !previousMeal
+    ? 'Próxima refeição do dia'
+    : switchToNext
+      ? 'Próxima refeição · horário previsto ' + String(nextMeal.meal_time || '').slice(0,5)
+      : 'Refeição deste período';
   const tomorrowSnack = mealsCache.find(m =>
     m.user_id === currentUser.id && Number(m.day_of_week) === tomorrow &&
     /lanche/i.test(m.meal_name || '')
