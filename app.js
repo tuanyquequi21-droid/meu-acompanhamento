@@ -60,7 +60,13 @@ async function renderTrainingInsights(){
   const bulb=tube?.querySelector('.thermo-bulb-fill');if(bulb)bulb.style.opacity=String(Math.max(.12,heat/100));
   $('frequency-status').textContent=status;$('frequency-value').textContent=heat+'%';
   $('frequency-detail').textContent=recent.length+' treinos em 28 dias · média de '+avg+'/semana';
-  $('muscle-map').innerHTML=muscleMapMarkup(exercises||[]);
+  let exercises=[];
+  if(ids.length){
+   const {data:exerciseRows,error:ee}=await supabase.from('fit_workout_exercises').select('exercise_name,session_id').in('session_id',ids);
+   if(ee)throw ee;
+   exercises=exerciseRows||[];
+  }
+  $('muscle-map').innerHTML=muscleMapMarkup(exercises);
   $('muscle-legend').innerHTML='<span><i class="legend-low"></i>Menor foco</span><span><i class="legend-mid"></i>Foco médio</span><span><i class="legend-high"></i>Maior foco</span>';
  }catch(e){$('muscle-map').innerHTML='<p class="muted small">Não foi possível montar seu mapa muscular: '+safe(e.message)+'</p>'}
 }
