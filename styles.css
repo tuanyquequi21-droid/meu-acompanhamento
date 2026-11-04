@@ -841,3 +841,7 @@ header .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 :root[data-theme="dark"] .challenge-invite-option{background:var(--surface-2);border-color:var(--line)}
 :root[data-theme="dark"] .challenge-meter{background:#34473A}
 @media(max-width:480px){.challenge-invitees{grid-template-columns:1fr}.challenge-own-goal{align-items:flex-start;flex-direction:column}.challenge-own-goal select{max-width:none;width:100%}}
+
+.challenge-invitation{border-style:dashed}
+.challenge-invitation-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.challenge-invitation-actions button{flex:1}
