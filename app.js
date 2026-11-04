@@ -86,6 +86,41 @@ async function loadCommunity(){
   await loadProgressFeed();
  }catch(e){$('friend-list').textContent=e.message}
 }
+function routineShareText(r){
+ const list=(r.exercises||[]).map((x,i)=>(i+1)+'. '+x.name+' — '+x.sets+' séries × '+(x.reps_label||x.reps)+' reps'+(x.load!=null?' · '+x.load+' kg':'')).join('\n');
+ return '💪 '+r.name+'\n\n'+list+'\n\nTreino organizado no Meu Acompanhamento 🔥';
+}
+async function copyRoutineText(r){
+ const value=routineShareText(r);
+ try{await navigator.clipboard.writeText(value);toast('Treino copiado!')}
+ catch(e){const ta=document.createElement('textarea');ta.value=value;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('Treino copiado!')}
+}
+function shareRoutineWhatsApp(r){window.open('https://wa.me/?text='+encodeURIComponent(routineShareText(r)),'_blank','noopener,noreferrer')}
+async function copyFriendRoutine(id){
+ const r=friendRoutineCache.find(x=>x.id===id);if(!r)return;
+ try{const {error}=await supabase.from('fit_workout_routines').insert({space_id:space,user_id:user.id,name:r.name+' (cópia)',exercises:r.exercises||[]});if(error)throw error;toast('Ficha copiada para suas fichas!')}
+ catch(e){toast('Não foi possível copiar: '+e.message)}
+}
+async function shareRoutineCard(r){
+ try{
+  const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const ctx=canvas.getContext('2d');
+  const bg=ctx.createLinearGradient(0,0,1080,1350);bg.addColorStop(0,'#241B4B');bg.addColorStop(.55,'#5541B8');bg.addColorStop(1,'#167C78');ctx.fillStyle=bg;ctx.fillRect(0,0,1080,1350);
+  ctx.globalAlpha=.13;ctx.fillStyle='#FFFFFF';[[930,130,190],[130,1130,230],[920,1180,120]].forEach(v=>{ctx.beginPath();ctx.arc(v[0],v[1],v[2],0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1;
+  ctx.fillStyle='#D8FFEF';ctx.font='800 28px Arial';ctx.fillText('MEU ACOMPANHAMENTO  ✦',76,92);
+  ctx.fillStyle='#FFFFFF';ctx.font='800 64px Arial';ctx.fillText(String(r.name||'Meu treino').slice(0,27),76,205);
+  ctx.fillStyle='#E8E3FF';ctx.font='500 30px Arial';ctx.fillText((r.exercises||[]).length+' EXERCÍCIOS  •  FOCO E CONSTÂNCIA',78,260);
+  ctx.fillStyle='rgba(255,255,255,.12)';ctx.beginPath();ctx.roundRect(58,310,964,850,34);ctx.fill();
+  const list=(r.exercises||[]).slice(0,9);let y=390;
+  list.forEach((x,i)=>{ctx.fillStyle='#D8FFEF';ctx.beginPath();ctx.arc(112,y-10,28,0,Math.PI*2);ctx.fill();ctx.fillStyle='#2B235A';ctx.font='800 25px Arial';ctx.textAlign='center';ctx.fillText(String(i+1),112,y-1);ctx.textAlign='left';ctx.fillStyle='#FFFFFF';ctx.font='700 34px Arial';ctx.fillText(String(x.name||'Exercício').slice(0,34),164,y);ctx.fillStyle='#E3E0F5';ctx.font='500 25px Arial';ctx.fillText((x.sets||3)+' séries × '+(x.reps_label||x.reps||'—')+' reps'+(x.load!=null?' · '+x.load+' kg':''),164,y+39);y+=(list.length>6?88:104)});
+  if((r.exercises||[]).length>9){ctx.fillStyle='#D8FFEF';ctx.font='600 25px Arial';ctx.fillText('+ '+((r.exercises||[]).length-9)+' exercícios',164,y+8)}
+  ctx.fillStyle='#FFFFFF';ctx.font='800 34px Arial';ctx.fillText('SEU ESFORÇO CONTA. VAI NO SEU RITMO. 🔥',76,1240);
+  ctx.fillStyle='#E8E3FF';ctx.font='500 23px Arial';ctx.fillText('Compartilhe sua evolução • #MeuAcompanhamento',76,1290);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw Error('Não foi possível gerar a imagem.');
+  const file=new File([blob],'treino-meu-acompanhamento.png',{type:'image/png'});
+  if(navigator.canShare?.({files:[file]})&&navigator.share){await navigator.share({files:[file],title:r.name,text:'Meu treino 💪'});toast('Imagem pronta para compartilhar!')}
+  else{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='treino-meu-acompanhamento.png';a.click();URL.revokeObjectURL(u);toast('Card salvo! Agora é só publicar nas redes.')}
+ }catch(e){if(e.name!=='AbortError')toast('Não foi possível gerar o card: '+e.message)}
+}
 async function loadFriendProfile(id){
  const host=$('friend-profile-content');if(!host)return;host.innerHTML='<p class="muted">Carregando perfil…</p>';
  try{
