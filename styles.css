@@ -1133,3 +1133,25 @@ nav button.current span{background:#E2F4E9;color:#168B57}
 #training-insights .muscle-legend span{font-size:10px}
 :root[data-theme="dark"] #training-insights .muscle-atlas{--bm-region-stroke:#8FA196;--bm-background-fill:#34453B;--bm-background-opacity:.2;--bm-tooltip-bg:#E7F2EA;--bm-tooltip-color:#17251B}
 @media(max-width:760px){#training-insights .muscle-atlas{--bm-max-height:340px;--bm-max-width:230px;--bm-max-width-both:100%}}
+
+
+/* v49 — menu acima das camadas da página e apresentação corporal por sexo */
+:root[data-layout="experimental"] #app>.app-navigation{
+ position:fixed!important;z-index:10000!important;pointer-events:auto!important;
+ isolation:isolate;touch-action:pan-y;overscroll-behavior:contain;
+}
+:root[data-layout="experimental"] #app>.app-navigation button{
+ position:relative!important;z-index:10001!important;pointer-events:auto!important;
+ cursor:pointer!important;touch-action:manipulation!important;user-select:none;
+}
+:root[data-layout="experimental"] #app>main{position:relative;z-index:1}
+:root[data-layout="experimental"] #app>.app-topbar{position:sticky;z-index:20}
+#profile-page #profile-sex{display:block;width:100%;margin-top:6px}
+#profile-page label:has(#profile-sex) small{display:block;margin-top:5px;font-size:10px;line-height:1.45}
+#training-insights[data-sex="female"] .muscle-atlas svg{transform:scaleX(.94);transform-origin:center top}
+#training-insights[data-sex="male"] .muscle-atlas svg{transform:scaleX(1.035);transform-origin:center top}
+@media(max-width:760px){
+ :root[data-layout="experimental"] #app>.app-navigation{z-index:10000!important}
+ #training-insights[data-sex="female"] .muscle-atlas svg{transform:scaleX(.96)}
+ #training-insights[data-sex="male"] .muscle-atlas svg{transform:scaleX(1.02)}
+}
