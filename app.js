@@ -1,4 +1,4 @@
-import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.58.0';const supabase=createClient('https://iecdvnsvnobpxqnusitw.supabase.co','sb_publishable_WSsAqx4AVJs7LwYlhDiqng_dqCgG3at');const $=id=>document.getElementById(id);let user=null,space=null,mode='login',friendRealtimeChannel=null,activeFriendId=null,friendRoutineCache=[];const today=()=>{const d=new Date(),o=d.getTimezoneOffset();return new Date(d.getTime()-o*60000).toISOString().slice(0,10)},n=id=>$(id).value===''?null:Number($(id).value),row=x=>({space_id:space,user_id:user.id,...x});function toast(s){$('toast').textContent=s;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2400)}
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.58.0';const supabase=createClient('https://iecdvnsvnobpxqnusitw.supabase.co','sb_publishable_WSsAqx4AVJs7LwYlhDiqng_dqCgG3at');const $=id=>document.getElementById(id);let user=null,space=null,mode='login',friendRealtimeChannel=null,activeFriendId=null,friendRoutineCache=[],challengeFriendIds=[];const today=()=>{const d=new Date(),o=d.getTimezoneOffset();return new Date(d.getTime()-o*60000).toISOString().slice(0,10)},n=id=>$(id).value===''?null:Number($(id).value),row=x=>({space_id:space,user_id:user.id,...x});function toast(s){$('toast').textContent=s;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2400)}
 function watchFriendRequests(){if(friendRealtimeChannel){supabase.removeChannel(friendRealtimeChannel);friendRealtimeChannel=null}friendRealtimeChannel=supabase.channel('friend-requests-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'fit_friendships',filter:'addressee_id=eq.'+user.id},payload=>{if(payload.new?.status==='pending'){toast('Você recebeu uma solicitação de conexão!');if($('community')?.classList.contains('active'))loadCommunity()}}).subscribe();}function msg(id,s){$(id).textContent=s}function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}async function save(t,x){const {error}=await supabase.from(t).insert(row(x));if(error)throw error}async function day(t,c){const start=new Date();start.setHours(0,0,0,0);const end=new Date(start);end.setDate(end.getDate()+1);const {data,error}=await supabase.from(t).select('*').eq('space_id',space).eq('user_id',user.id).gte(c,start.toISOString()).lt(c,end.toISOString()).order(c,{ascending:false});if(error)throw error;return data||[]}function entry(a,b,c=''){return '<div class="entry"><div><b>'+safe(a)+'</b><small>'+safe(b)+'</small></div><strong>'+safe(c)+'</strong></div>'}function screen(id){['auth','setup','app'].forEach(x=>$(x).classList.toggle('hide',x!==id))}function page(id){sessionStorage.setItem('ma-current-page',id);window.scrollTo({top:0,left:0,behavior:'instant'});document.documentElement.scrollTop=0;document.body.scrollTop=0;const mainScroll=$('#app>main');if(mainScroll)mainScroll.scrollTop=0;document.querySelectorAll('main .page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('nav [data-page]').forEach(b=>b.classList.toggle('current',b.dataset.page===id));if(id==='dashboard')dashboard();if(id==='food')foods();if(id==='water')waters();if(id==='workout')workouts();if(id==='habits')habits();if(id==='evolution')metrics();if(id==='community')loadCommunity();if(id==='friend-profile-page'&&activeFriendId)loadFriendProfile(activeFriendId)}document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('selected',x===b));$('name-wrap').classList.toggle('hide',mode!=='signup');$('auth-submit').textContent=mode==='login'?'Entrar':'Criar conta';$('password').autocomplete=mode==='login'?'current-password':'new-password';msg('auth-msg','')});$('auth-form').onsubmit=async e=>{e.preventDefault();msg('auth-msg','Aguarde…');try{const email=$('email').value.trim(),password=$('password').value;if(mode==='login'){const {error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error}else{const {data,error}=await supabase.auth.signUp({email,password,options:{data:{display_name:$('display-name').value.trim()}}});if(error)throw error;if(!data.session){msg('auth-msg','Conta criada! Confirme seu e-mail e depois entre.');return}}}catch(e){msg('auth-msg',e.message)}};$('space-form').onsubmit=async e=>{e.preventDefault();msg('space-msg','Criando…');const {data,error}=await supabase.rpc('fit_create_space',{p_name:$('space-name').value.trim()});if(error){msg('space-msg',error.message);return}space=data;await loadApp()};async function loadApp(){if(!user)return;const {data,error}=await supabase.from('fit_space_members').select('space_id').eq('user_id',user.id).limit(1).maybeSingle();if(error){toast(error.message);return}if(!data){screen('setup');return}space=data.space_id;const {data:s}=await supabase.from('fit_spaces').select('name').eq('id',space).single();$('profile-space').textContent=s?.name||'Espaço compartilhado';$('profile-email').textContent=user.email;$('hello').textContent='Olá, '+(user.user_metadata?.display_name||user.email.split('@')[0])+'! 👋';$('profile').textContent=(user.user_metadata?.display_name||user.email)[0].toUpperCase();await loadSocialProfile();watchFriendRequests();await loadTheme();$('date-label').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});screen('app');activeFriendId=sessionStorage.getItem('ma-friend-profile')||null;const savedPage=sessionStorage.getItem('ma-current-page');page(savedPage&&document.getElementById(savedPage)?.classList.contains('page')&&(savedPage!=='friend-profile-page'||activeFriendId)?savedPage:'dashboard')}async function renderMotivation(){
  const host=$('motivation-card');if(!host||!user)return;
  try{
@@ -84,6 +84,44 @@ $('friend-search-form').onsubmit=async e=>{
  $('add-found-user')?.addEventListener('click',async()=>{try{const {error}=await supabase.rpc('fit_send_friend_request',{p_username:found.username});if(error)throw error;toast('Solicitação enviada!');$('add-found-user').disabled=true;$('add-found-user').textContent='Solicitação enviada';await loadCommunity()}catch(e){toast(e.message)}});
  }catch(e){toast(e.message)}
 };
+
+async function loadChallenges(){
+ const host=$('challenge-list');if(!host||!user)return;
+ try{
+  const {data:members,error}=await supabase.from('fit_challenge_members').select('challenge_id,weekly_goal').eq('user_id',user.id);
+  if(error)throw error;
+  if(!members?.length){host.innerHTML='<p class="muted small">Você ainda não participa de desafios. Crie um e convide suas conexões!</p>';return}
+  const ids=members.map(x=>x.challenge_id);
+  const {data:challenges,error:ce}=await supabase.from('fit_challenges').select('id,title,starts_on,ends_on,created_by').in('id',ids).order('created_at',{ascending:false});
+  if(ce)throw ce;
+  const cards=await Promise.all((challenges||[]).map(async c=>{
+   const {data,error:pe}=await supabase.rpc('fit_get_challenge_progress',{p_challenge_id:c.id});if(pe)throw pe;
+   const participants=pe?[]:(data?.members||[]),mine=members.find(x=>x.challenge_id===c.id);
+   const rows=participants.map((p,i)=>'<div class="challenge-rank-row"><span class="challenge-rank-number">'+(i+1)+'º</span><span class="challenge-rank-person"><b>'+safe(p.display_name||p.username||'Atleta')+(p.user_id===user.id?' (você)':'')+'</b><small>'+p.workout_count+' de '+p.weekly_goal+' treinos · '+p.percentage+'% da meta</small><span class="challenge-meter"><i style="width:'+p.percentage+'%"></i></span></span><strong>'+p.percentage+'%</strong></div>').join('');
+   const start=new Date(c.starts_on+'T12:00:00').toLocaleDateString('pt-BR'),end=new Date(c.ends_on+'T12:00:00').toLocaleDateString('pt-BR');
+   return '<article class="challenge-card"><div class="challenge-card-head"><div><span class="challenge-kicker">DESAFIO ENTRE CONEXÕES</span><h4>'+safe(c.title)+'</h4><small>'+start+' até '+end+'</small></div><span class="challenge-trophy">🏆</span></div><div class="challenge-ranking-title">Ranking por meta cumprida</div>'+(rows||'<p class="muted small">Ainda não há participantes.</p>')+'<label class="challenge-own-goal">Minha meta neste desafio<select data-challenge-goal="'+c.id+'">'+[2,3,4,5,6].map(n=>'<option value="'+n+'" '+(Number(mine?.weekly_goal||3)===n?'selected':'')+'>'+n+' treinos na semana</option>').join('')+'</select></label></article>';
+  }));
+  host.innerHTML=cards.join('');
+  host.querySelectorAll('[data-challenge-goal]').forEach(sel=>sel.onchange=async()=>{try{const {error}=await supabase.from('fit_challenge_members').update({weekly_goal:Number(sel.value)}).eq('challenge_id',sel.dataset.challengeGoal).eq('user_id',user.id);if(error)throw error;toast('Sua meta foi atualizada!');await loadChallenges()}catch(e){toast(e.message)}});
+ }catch(e){host.innerHTML='<p class="muted small">Não foi possível carregar os desafios: '+safe(e.message)+'</p>'}
+}
+$('challenge-create-form')?.addEventListener('submit',async e=>{
+ e.preventDefault();const button=$('challenge-create-submit');button.disabled=true;
+ try{
+  const invited=[...document.querySelectorAll('input[name="challenge-friend"]:checked')].map(x=>x.value);
+  if(!invited.length)throw Error('Selecione pelo menos uma conexão para competir com você.');
+  const title=$('challenge-title').value.trim();if(title.length<3)throw Error('Dê um nome ao desafio.');
+  const now=new Date(),monday=new Date(now.getFullYear(),now.getMonth(),now.getDate());monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
+  const sunday=new Date(monday);sunday.setDate(sunday.getDate()+6);
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const {data:c,error}=await supabase.from('fit_challenges').insert({created_by:user.id,title,starts_on:iso(monday),ends_on:iso(sunday)}).select('id').single();if(error)throw error;
+  const goal=Number($('challenge-own-goal').value||3);
+  const rows=[{challenge_id:c.id,user_id:user.id,weekly_goal:goal},...invited.map(id=>({challenge_id:c.id,user_id:id,weekly_goal:3}))];
+  const {error:me}=await supabase.from('fit_challenge_members').insert(rows);if(me){await supabase.from('fit_challenges').delete().eq('id',c.id);throw me}
+  e.target.reset();$('challenge-own-goal').value='3';await loadChallenges();toast('Desafio criado e convites enviados! 💪');
+ }catch(err){toast(err.message)}finally{button.disabled=false}
+});
+
 async function loadCommunity(){
  try{
   const {data:rels,error}=await supabase.from('fit_friendships').select('*').or('requester_id.eq.'+user.id+',addressee_id.eq.'+user.id).order('created_at',{ascending:false});if(error)throw error;
@@ -93,12 +131,15 @@ async function loadCommunity(){
   const incomingIds=incoming.map(x=>x.requester_id);const outgoingIds=outgoing.map(x=>x.addressee_id);const all=[...new Set([...ids,...incomingIds,...outgoingIds])];
   const {data:profiles,error:pe}=all.length?await supabase.from('profiles').select('id,username,display_name').in('id',all):{data:[],error:null};if(pe)throw pe;
   const byId=Object.fromEntries((profiles||[]).map(x=>[x.id,x]));
+  challengeFriendIds=ids;
+  const inviteHost=$('challenge-invitees');if(inviteHost)inviteHost.innerHTML=ids.map(id=>{const p=byId[id]||{};return '<label class="challenge-invite-option"><input type="checkbox" name="challenge-friend" value="'+id+'"><span><b>'+safe(p.display_name||p.username||'Usuário')+'</b><small>@'+safe(p.username||'usuário')+'</small></span></label>'}).join('')||'<p class="muted small">Adicione conexões para criar um desafio em grupo.</p>';
   $('friend-requests').innerHTML=incoming.map(x=>{const p=byId[x.requester_id]||{};return '<div class="entry"><div><b>@'+safe(p.username||'usuário')+'</b><small>'+safe(p.display_name||'')+'</small></div><span><button class="primary" data-accept="'+x.id+'">Aceitar</button> <button class="secondary" data-decline="'+x.id+'">Recusar</button></span></div>'}).join('')||'Nenhuma solicitação pendente.';
   $('friend-requests').querySelectorAll('[data-accept],[data-decline]').forEach(b=>b.onclick=async()=>{try{const {error}=await supabase.rpc('fit_answer_friend_request',{p_request_id:b.dataset.accept||b.dataset.decline,p_accept:!!b.dataset.accept});if(error)throw error;await loadCommunity();toast('Solicitação atualizada.')}catch(e){toast(e.message)}});
   $('friend-sent-requests').innerHTML=outgoing.map(x=>{const p=byId[x.addressee_id]||{};return '<div class="entry"><div><b>@'+safe(p.username||'usuário')+'</b><small>Aguardando resposta</small></div><span class="muted small">Pendente</span></div>'}).join('')||'Você não tem solicitações enviadas pendentes.';
   $('friend-list').innerHTML=ids.map(id=>{const p=byId[id]||{};return '<article class="connection-card"><div class="connection-avatar">'+safe((p.display_name||p.username||'?').slice(0,1).toUpperCase())+'</div><div class="connection-info"><b>'+safe(p.display_name||p.username||'Usuário')+'</b><small>@'+safe(p.username||'usuário')+'</small></div><button class="secondary" data-open-profile="'+id+'">Abrir perfil →</button></article>'}).join('')||'Você ainda não tem conexões.';
   $('friend-list').querySelectorAll('[data-open-profile]').forEach(b=>b.onclick=()=>{activeFriendId=b.dataset.openProfile;sessionStorage.setItem('ma-friend-profile',activeFriendId);page('friend-profile-page')});
   await loadProgressFeed();
+  await loadChallenges();
  }catch(e){$('friend-list').textContent=e.message}
 }
 function routineShareText(r){
@@ -119,17 +160,17 @@ async function copyFriendRoutine(id){
 async function shareRoutineCard(r){
  try{
   const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const ctx=canvas.getContext('2d');
-  const bg=ctx.createLinearGradient(0,0,1080,1350);bg.addColorStop(0,'#241B4B');bg.addColorStop(.55,'#5541B8');bg.addColorStop(1,'#167C78');ctx.fillStyle=bg;ctx.fillRect(0,0,1080,1350);
+  const bg=ctx.createLinearGradient(0,0,1080,1350);bg.addColorStop(0,'#101A14');bg.addColorStop(.55,'#167A4A');bg.addColorStop(1,'#39C879');ctx.fillStyle=bg;ctx.fillRect(0,0,1080,1350);
   ctx.globalAlpha=.13;ctx.fillStyle='#FFFFFF';[[930,130,190],[130,1130,230],[920,1180,120]].forEach(v=>{ctx.beginPath();ctx.arc(v[0],v[1],v[2],0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1;
-  ctx.fillStyle='#D8FFEF';ctx.font='800 28px Arial';ctx.fillText('MEU ACOMPANHAMENTO  ✦',76,92);
+  ctx.fillStyle='#C8FFE0';ctx.font='800 28px Arial';ctx.fillText('MEU ACOMPANHAMENTO  ✦',76,92);
   ctx.fillStyle='#FFFFFF';ctx.font='800 64px Arial';ctx.fillText(String(r.name||'Meu treino').slice(0,27),76,205);
-  ctx.fillStyle='#E8E3FF';ctx.font='500 30px Arial';ctx.fillText((r.exercises||[]).length+' EXERCÍCIOS  •  FOCO E CONSTÂNCIA',78,260);
+  ctx.fillStyle='#E0F8E9';ctx.font='500 30px Arial';ctx.fillText((r.exercises||[]).length+' EXERCÍCIOS  •  FOCO E CONSTÂNCIA',78,260);
   ctx.fillStyle='rgba(255,255,255,.12)';ctx.beginPath();ctx.roundRect(58,310,964,850,34);ctx.fill();
   const list=(r.exercises||[]).slice(0,9);let y=390;
-  list.forEach((x,i)=>{ctx.fillStyle='#D8FFEF';ctx.beginPath();ctx.arc(112,y-10,28,0,Math.PI*2);ctx.fill();ctx.fillStyle='#2B235A';ctx.font='800 25px Arial';ctx.textAlign='center';ctx.fillText(String(i+1),112,y-1);ctx.textAlign='left';ctx.fillStyle='#FFFFFF';ctx.font='700 34px Arial';ctx.fillText(String(x.name||'Exercício').slice(0,34),164,y);ctx.fillStyle='#E3E0F5';ctx.font='500 25px Arial';ctx.fillText((x.sets||3)+' séries × '+(x.reps_label||x.reps||'—')+' reps'+(x.load!=null?' · '+x.load+' kg':''),164,y+39);y+=(list.length>6?88:104)});
+  list.forEach((x,i)=>{ctx.fillStyle='#D8FFEF';ctx.beginPath();ctx.arc(112,y-10,28,0,Math.PI*2);ctx.fill();ctx.fillStyle='#123B26';ctx.font='800 25px Arial';ctx.textAlign='center';ctx.fillText(String(i+1),112,y-1);ctx.textAlign='left';ctx.fillStyle='#FFFFFF';ctx.font='700 34px Arial';ctx.fillText(String(x.name||'Exercício').slice(0,34),164,y);ctx.fillStyle='#E0F8E9';ctx.font='500 25px Arial';ctx.fillText((x.sets||3)+' séries × '+(x.reps_label||x.reps||'—')+' reps'+(x.load!=null?' · '+x.load+' kg':''),164,y+39);y+=(list.length>6?88:104)});
   if((r.exercises||[]).length>9){ctx.fillStyle='#D8FFEF';ctx.font='600 25px Arial';ctx.fillText('+ '+((r.exercises||[]).length-9)+' exercícios',164,y+8)}
   ctx.fillStyle='#FFFFFF';ctx.font='800 34px Arial';ctx.fillText('SEU ESFORÇO CONTA. VAI NO SEU RITMO. 🔥',76,1240);
-  ctx.fillStyle='#E8E3FF';ctx.font='500 23px Arial';ctx.fillText('Compartilhe sua evolução • #MeuAcompanhamento',76,1290);
+  ctx.fillStyle='#E0F8E9';ctx.font='500 23px Arial';ctx.fillText('Compartilhe sua evolução • #MeuAcompanhamento',76,1290);
   const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw Error('Não foi possível gerar a imagem.');
   const file=new File([blob],'treino-meu-acompanhamento.png',{type:'image/png'});
   if(navigator.canShare?.({files:[file]})&&navigator.share){await navigator.share({files:[file],title:r.name,text:'Meu treino 💪'});toast('Imagem pronta para compartilhar!')}
