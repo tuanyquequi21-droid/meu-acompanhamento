@@ -1148,8 +1148,8 @@ nav button.current span{background:#E2F4E9;color:#168B57}
 :root[data-layout="experimental"] #app>.app-topbar{position:sticky;z-index:20}
 #profile-page #profile-sex{display:block;width:100%;margin-top:6px}
 #profile-page label:has(#profile-sex) small{display:block;margin-top:5px;font-size:10px;line-height:1.45}
-#training-insights[data-sex="female"] .muscle-atlas svg{transform:scaleX(.94);transform-origin:center top}
-#training-insights[data-sex="male"] .muscle-atlas svg{transform:scaleX(1.035);transform-origin:center top}
+#training-insights #muscle-map[data-sex="female"] .muscle-atlas svg{transform:scaleX(.94);transform-origin:center top}
+#training-insights #muscle-map[data-sex="male"] .muscle-atlas svg{transform:scaleX(1.035);transform-origin:center top}
 @media(max-width:760px){
  :root[data-layout="experimental"] #app>.app-navigation{z-index:10000!important}
  #training-insights[data-sex="female"] .muscle-atlas svg{transform:scaleX(.96)}
