@@ -29,11 +29,12 @@ function muscleTargets(name){
 }
 function renderMuscleAtlas(exercises){
  const host=$('muscle-map');if(!host)return;
+ const sex=user?.user_metadata?.sex==='female'?'female':'male';
  const counts={Chest:0,Back:0,Shoulders:0,Arms:0,Abdominals:0,Legs:0};
  for(const ex of exercises||[])for(const group of muscleTargets(ex.exercise_name))counts[group]++;
  const max=Math.max(1,...Object.values(counts)),state={};
  for(const muscle of MUSCLE_MAP){const value=counts[muscle.group]||0;if(value)state[muscle.id]={intensity:Math.min(10,Math.max(1,Math.round(value/max*10))),selected:false};}
- host.innerHTML='<div id="muscle-atlas" class="muscle-atlas" aria-label="Mapa anatômico dos músculos, frente e costas"></div>';
+ host.dataset.sex=sex; host.innerHTML='<div id="muscle-atlas" class="muscle-atlas" aria-label="Mapa anatômico dos músculos, frente e costas"></div>';
  if(muscleBodyChart){try{muscleBodyChart.destroy()}catch(e){}muscleBodyChart=null}
  muscleBodyChart=new BodyChart($('muscle-atlas'),{view:ViewSide.BOTH,bodyState:state,showViewLabel:true,interactive:false,intensityColor:value=>value===0?'#D9DEDC':value<4?'#B7E6C6':value<7?'#55C982':'#168B57',labels:{chart:()=>'Mapa muscular',viewLabel:view=>view===ViewSide.FRONT?'Frente':'Costas',regionName:muscle=>muscle.name,intensity:value=>'Intensidade '+value}});
  const names={Chest:'Peito',Back:'Costas',Shoulders:'Ombros',Arms:'Braços',Abdominals:'Abdômen',Legs:'Pernas'};
@@ -94,6 +95,7 @@ async function loadSocialProfile(){
  $('profile-display-name').value=p.display_name||user.user_metadata?.display_name||'';
  $('profile-username').value=p.username||'';
  $('profile-bio').value=p.bio||'';
+ $('profile-sex').value=user.user_metadata?.sex==='female'?'female':user.user_metadata?.sex==='male'?'male':'';
  $('profile-handle').textContent=p.username?'Seu perfil: @'+p.username:'Escolha um nome de usuário único.';
  $('profile').textContent=(p.display_name||p.username||'U').slice(0,1).toUpperCase();
  if(p.avatar_path){const {data}=await supabase.storage.from('fit-community').createSignedUrl(p.avatar_path,3600);if(data?.signedUrl){$('profile-photo').src=data.signedUrl;$('profile-photo').classList.remove('hide');$('profile-placeholder').classList.add('hide');$('profile').innerHTML='<img src=\"'+data.signedUrl+'\" alt=\"Perfil\">'}}
@@ -103,6 +105,7 @@ $('save-profile').onclick=async()=>{
   const username=$('profile-username').value.trim().replace(/^@/,'').toLowerCase();
   if(!/^[a-z0-9_.]{3,24}$/.test(username))throw Error('Use 3 a 24 caracteres: letras, números, ponto ou sublinhado.');
   const patch={id:user.id,username,display_name:$('profile-display-name').value.trim().slice(0,60),bio:$('profile-bio').value.trim().slice(0,160)};
+  const sex=$('profile-sex').value||null;
   const file=$('avatar-file').files[0];
   if(file){
    if(!/^image\/(jpeg|png|webp)$/.test(file.type)||file.size>8*1024*1024)throw Error('Use JPG, PNG ou WebP de até 8 MB.');
@@ -110,6 +113,7 @@ $('save-profile').onclick=async()=>{
    const {error:up}=await supabase.storage.from('fit-community').upload(path,file,{contentType:file.type,upsert:true});if(up)throw up;patch.avatar_path=path;
   }
   const {error}=await supabase.from('profiles').upsert(patch,{onConflict:'id'});if(error)throw error;
+  const {data:authUpdate,error:authError}=await supabase.auth.updateUser({data:{sex}});if(authError)throw authError;if(authUpdate?.user)user=authUpdate.user;
   $('avatar-file').value='';await loadSocialProfile();toast('Perfil atualizado!');
  }catch(e){toast(e.message)}
 };
