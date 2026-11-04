@@ -910,3 +910,52 @@ nav button.current span{background:#E2F4E9;color:#168B57}
 :root[data-theme="dark"] .home-hero{background:linear-gradient(115deg,#14271B,#1B4930 72%,#236D45)!important}
 @media(max-width:760px){.training-insights{grid-template-columns:1fr}.frequency-thermometer{min-height:150px}.muscle-map{grid-template-columns:minmax(125px,.9fr) minmax(130px,1fr)}.insight-card{padding:16px}}
 @media(max-width:370px){.muscle-map{grid-template-columns:1fr}.muscle-figure{max-width:92px}}
+
+
+/* v44 — anatomia, hierarquia do dashboard e paleta grafite/laranja/verde */
+:root{--sg-bg:#F2F4F5;--sg-surface:#FFFFFF;--sg-soft:#E9EDEF;--sg-ink:#20272D;--sg-muted:#68747C;--sg-line:#D9E0E3;--sg-green:#25845A;--sg-orange:#E58A3A;--sg-red:#C94C4C;--sg-graphite:#30383F}
+:root[data-theme="clean"]{--bg:#F2F4F5;--surface:#FFFFFF;--surface-2:#E9EDEF;--ink:#20272D;--muted:#68747C;--line:#D9E0E3;--accent:#25845A}
+:root[data-theme="dark"]{--bg:#151A1E;--surface:#20272D;--surface-2:#2B343B;--ink:#F2F4F5;--muted:#B1BBC1;--line:#3A454D;--accent:#65B98A;--sg-soft:#303A41}
+:root[data-theme="dark"] body{background:#151A1E!important;color:#F2F4F5!important}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .insight-card,:root[data-theme="dark"] .shortcuts button{background:#20272D!important;border-color:#3A454D!important;color:#F2F4F5!important}
+:root[data-theme="dark"] .muted,:root[data-theme="dark"] small,:root[data-theme="dark"] .insight-subtitle,:root[data-theme="dark"] .thermo-copy>small{color:#B1BBC1!important}
+:root[data-theme="dark"] input,:root[data-theme="dark"] select,:root[data-theme="dark"] textarea{background:#171E23!important;border-color:#46525A!important;color:#F2F4F5!important}
+:root[data-theme="dark"] .primary{background:linear-gradient(135deg,#25845A,#39A875)!important}
+:root[data-theme="dark"] .secondary{background:#35433D!important;color:#DDF4E6!important}
+.home-hero{background:linear-gradient(115deg,#242D33 0%,#35434A 68%,#52615E 100%)!important}
+.home-hero .eyebrow{color:#F0A45D!important}
+.primary{background:linear-gradient(135deg,#25845A,#35A873)!important}
+.secondary{background:#E8ECEE!important;color:#30383F!important}
+.insight-kicker{color:#D77A2D!important}
+.insight-icon{background:#F8EBDD!important;color:#A75B20}
+:root[data-theme="dark"] .insight-icon{background:#4A382B!important;color:#FFC18A!important}
+.thermo-fill{background:linear-gradient(0deg,#25845A 0%,#8DBD69 42%,#E9B04D 72%,#D95745 100%)!important}
+.thermo-copy>strong{color:#D77A2D!important}
+.thermo-bulb-fill{background:linear-gradient(135deg,#25845A,#E9B04D,#D95745)!important}
+.legend-low{background:#F4B183!important}.legend-mid{background:#65B98A!important}.legend-high{background:#25845A!important}
+.muscle-figure{width:100%;max-width:142px;height:auto;filter:drop-shadow(0 4px 5px #17252D12)}
+.muscle-figures{gap:clamp(12px,3vw,30px);align-items:flex-end}
+.muscle-figures>div{flex:1;max-width:150px}
+.muscle-map{grid-template-columns:minmax(180px,1.05fr) minmax(180px,.95fr);gap:20px}
+.muscle-focus-row span i{border:1px solid #00000012}
+.training-insights{grid-template-columns:minmax(280px,.78fr) minmax(0,1.5fr);gap:18px;margin:20px 0 26px}
+.insight-card{padding:22px;border-radius:22px}
+.dashboard-water-quick{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:-8px 0 20px;padding:12px 15px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.dashboard-water-quick>span{font-size:9px;letter-spacing:1.1px;font-weight:900;color:var(--muted);margin-right:5px}
+.dashboard-water-quick button{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--surface-2);color:var(--ink);font-size:11px;font-weight:800}
+.dashboard-water-quick button:hover{border-color:var(--sg-orange);color:#B96824}
+#recent.recent-activity{display:grid;grid-template-columns:1fr;width:100%;max-width:none;gap:0;padding:8px 20px;min-height:80px;box-sizing:border-box}
+#recent .entry,#recent .entry-workout{width:100%;max-width:none;min-width:0;box-sizing:border-box;border-bottom:1px solid var(--line);padding:14px 4px;margin:0;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left}
+#recent .entry:last-child,#recent .entry-workout:last-child{border-bottom:0}
+#recent .entry-copy{min-width:0;display:flex;flex-direction:column;gap:4px}
+#recent .entry b,#recent .entry-workout b{font-size:13px;color:var(--ink)}
+#recent .entry small,#recent .entry-workout small{font-size:11px;color:var(--muted)}
+#recent .entry strong,#recent .entry-workout strong{font-size:11px;color:var(--sg-green);white-space:nowrap}
+.friend-muscle-insight{margin:18px 0;padding:20px;border:1px solid var(--line);border-radius:20px;background:var(--surface)}
+.friend-muscle-insight .muscle-map{margin-top:12px}
+:root[data-theme="dark"] .friend-muscle-insight{background:#20272D;border-color:#3A454D}
+:root[data-theme="dark"] .dashboard-water-quick{background:#20272D;border-color:#3A454D}
+:root[data-theme="dark"] .dashboard-water-quick button{background:#2B343B;border-color:#46525A;color:#F2F4F5}
+:root[data-theme="dark"] #recent .entry b,:root[data-theme="dark"] #recent .entry-workout b{color:#F2F4F5}
+@media(max-width:760px){.training-insights{grid-template-columns:1fr}.muscle-map{grid-template-columns:minmax(150px,.9fr) minmax(135px,1fr);gap:12px}.muscle-figure{max-width:130px}.dashboard-water-quick{gap:7px}.dashboard-water-quick>span{width:100%}#recent.recent-activity{padding:6px 14px}}
+@media(max-width:390px){.muscle-map{grid-template-columns:1fr}.muscle-figures{max-width:310px;margin:auto;width:100%}.muscle-figure{max-width:125px}}
