@@ -1099,3 +1099,27 @@ nav button.current span{background:#E2F4E9;color:#168B57}
     grid-template-columns:1fr;
   }
 }
+
+/* Mapa muscular anatômico — inspirado na leitura visual do SmartGym, com desenho vetorial original */
+:root[data-layout="experimental"] #app>.app-navigation{pointer-events:auto!important}
+:root[data-layout="experimental"] #app>.app-navigation button{position:relative;z-index:2;pointer-events:auto!important;touch-action:manipulation}
+#training-insights .muscle-card{min-width:0;overflow:hidden}
+#training-insights .muscle-map{display:grid;grid-template-columns:minmax(190px,1.15fr) minmax(130px,.85fr);align-items:center;gap:12px}
+#training-insights .muscle-figures{display:flex;justify-content:center;align-items:flex-end;gap:10px;width:100%;max-width:390px;margin:0 auto}
+#training-insights .muscle-figures>div{flex:1;min-width:0;display:flex;align-items:center;flex-direction:column;gap:5px}
+#training-insights .muscle-figures>div>span{font-size:9px;letter-spacing:1.3px;font-weight:800;color:var(--muted)}
+#training-insights .muscle-figure{display:block;width:100%;max-width:178px;height:auto;max-height:420px;overflow:visible}
+#training-insights .muscle-focus-list{width:100%;min-width:0}
+#training-insights .muscle-focus-row{padding:9px 2px}
+#training-insights .muscle-focus-row span{font-size:11px}
+#training-insights .muscle-focus-row b{font-size:10px}
+:root[data-theme="dark"] #training-insights .muscle-figure [data-muscle]{stroke:#26372E}
+@media(max-width:760px){
+ #training-insights .muscle-map{grid-template-columns:1fr;gap:8px}
+ #training-insights .muscle-figures{max-width:360px}
+ #training-insights .muscle-figure{max-width:168px;max-height:380px}
+ #training-insights .muscle-focus-list{max-width:440px;margin:0 auto}
+}
+@media(max-width:390px){
+ #training-insights .muscle-figure{max-width:145px}
+}
