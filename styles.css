@@ -1123,3 +1123,13 @@ nav button.current span{background:#E2F4E9;color:#168B57}
 @media(max-width:390px){
  #training-insights .muscle-figure{max-width:145px}
 }
+
+/* Atlas muscular anatômico de alta definição — @emmorts/body-muscles */
+#training-insights .muscle-card{overflow:hidden}
+#training-insights .muscle-map{display:block;width:100%;min-width:0}
+#training-insights .muscle-atlas{width:100%;max-width:620px;margin:0 auto;--bm-padding:4px;--bm-max-height:390px;--bm-max-width:280px;--bm-max-width-both:620px;--bm-svg-shadow:none;--bm-region-stroke:#7C8982;--bm-region-stroke-width:.45;--bm-background-fill:#DDE3DF;--bm-background-opacity:.15;--bm-region-inactive-opacity:.88;--bm-tooltip-bg:#1C2A22;--bm-tooltip-color:#fff}
+#training-insights .muscle-atlas svg{max-width:100%;height:auto}
+#training-insights .muscle-legend{justify-content:center;gap:8px 14px}
+#training-insights .muscle-legend span{font-size:10px}
+:root[data-theme="dark"] #training-insights .muscle-atlas{--bm-region-stroke:#8FA196;--bm-background-fill:#34453B;--bm-background-opacity:.2;--bm-tooltip-bg:#E7F2EA;--bm-tooltip-color:#17251B}
+@media(max-width:760px){#training-insights .muscle-atlas{--bm-max-height:340px;--bm-max-width:230px;--bm-max-width-both:100%}}
