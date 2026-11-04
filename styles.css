@@ -1268,6 +1268,6 @@ html[data-theme="dark"][data-layout="pages"] #app>.app-navigation{background:#22
 html[data-theme="dark"][data-layout="pages"] #app>.app-navigation button.current{background:#493526!important;color:#FFD0A4!important}
 html[data-theme="dark"][data-layout="pages"] .friend-muscle-map .muscle-atlas{--bm-region-stroke:#8FA196;--bm-background-fill:#34453B}
 @media(max-width:760px){
- html[data-layout="pages"] #app>.app-navigation{top:60px!important;min-height:62px!important;justify-content:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important}
+ html[data-layout="pages"] #app>.app-navigation{top:68px!important;min-height:62px!important;justify-content:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important}
  html[data-layout="pages"] #app>.app-navigation button{min-width:76px!important;min-height:46px!important}
 }
