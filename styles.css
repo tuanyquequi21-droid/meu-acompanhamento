@@ -959,3 +959,143 @@ nav button.current span{background:#E2F4E9;color:#168B57}
 :root[data-theme="dark"] #recent .entry b,:root[data-theme="dark"] #recent .entry-workout b{color:#F2F4F5}
 @media(max-width:760px){.training-insights{grid-template-columns:1fr}.muscle-map{grid-template-columns:minmax(150px,.9fr) minmax(135px,1fr);gap:12px}.muscle-figure{max-width:130px}.dashboard-water-quick{gap:7px}.dashboard-water-quick>span{width:100%}#recent.recent-activity{padding:6px 14px}}
 @media(max-width:390px){.muscle-map{grid-template-columns:1fr}.muscle-figures{max-width:310px;margin:auto;width:100%}.muscle-figure{max-width:125px}}
+\n
+/* Correção de centralização e contenção do layout — v45 */
+:root[data-layout="experimental"] #app{
+  display:block!important;
+  width:100%;
+  min-height:100dvh;
+}
+:root[data-layout="experimental"] #app>main{
+  display:block!important;
+  width:100%!important;
+  max-width:1120px!important;
+  margin:0 auto!important;
+  padding:28px 28px calc(112px + env(safe-area-inset-bottom))!important;
+  box-sizing:border-box;
+}
+:root[data-layout="experimental"] #app>.app-topbar{
+  width:100%;
+  box-sizing:border-box;
+}
+:root[data-layout="experimental"] #app>.app-navigation{
+  position:fixed!important;
+  inset:auto auto calc(12px + env(safe-area-inset-bottom)) 50%!important;
+  transform:translateX(-50%)!important;
+  width:min(620px,calc(100vw - 32px))!important;
+  max-width:620px!important;
+  height:auto!important;
+  margin:0!important;
+  padding:7px 6px!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:3px!important;
+  border:1px solid var(--line)!important;
+  border-radius:20px!important;
+  box-sizing:border-box;
+  z-index:40;
+}
+:root[data-layout="experimental"] #app>.app-navigation button{
+  min-width:0!important;
+  width:100%!important;
+  min-height:52px!important;
+  padding:4px 2px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  white-space:nowrap;
+}
+:root[data-layout="experimental"] #app>main>.page{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+:root[data-layout="experimental"] #app>main>#dashboard{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  width:100%;
+  max-width:1040px;
+  margin:0 auto;
+  gap:0;
+}
+:root[data-layout="experimental"] #dashboard>.home-hero,
+:root[data-layout="experimental"] #dashboard>.home-section-title,
+:root[data-layout="experimental"] #dashboard>.stats,
+:root[data-layout="experimental"] #dashboard>.shortcuts,
+:root[data-layout="experimental"] #dashboard>.dashboard-water-quick,
+:root[data-layout="experimental"] #dashboard>#motivation-card,
+:root[data-layout="experimental"] #dashboard>#training-insights,
+:root[data-layout="experimental"] #dashboard>#weekly-home-card,
+:root[data-layout="experimental"] #dashboard>#recent{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+:root[data-layout="experimental"] #dashboard>.home-hero{margin-left:0;margin-right:0}
+:root[data-layout="experimental"] #dashboard>.stats,
+:root[data-layout="experimental"] #dashboard>.shortcuts{align-self:stretch}
+:root[data-layout="experimental"] #dashboard>#training-insights{
+  display:grid!important;
+  grid-template-columns:minmax(250px,.85fr) minmax(0,1.4fr)!important;
+  align-items:stretch;
+  gap:16px;
+  margin:18px 0 24px;
+}
+:root[data-layout="experimental"] #training-insights>.insight-card{
+  width:100%;
+  min-width:0;
+  margin:0;
+  box-sizing:border-box;
+}
+:root[data-layout="experimental"] #training-insights .muscle-map{
+  width:100%;
+  min-width:0;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:12px;
+}
+:root[data-layout="experimental"] .page:not(#dashboard){
+  width:100%;
+  max-width:880px;
+  margin:0 auto;
+}
+:root[data-layout="experimental"] .page:not(#dashboard)>.card,
+:root[data-layout="experimental"] .page:not(#dashboard)>form.card{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+:root[data-layout="experimental"] #community .challenge-create-card,
+:root[data-layout="experimental"] #community>.card{
+  width:100%;
+}
+@media(max-width:760px){
+  :root[data-layout="experimental"] #app>main{
+    max-width:100%!important;
+    padding:18px 14px calc(112px + env(safe-area-inset-bottom))!important;
+  }
+  :root[data-layout="experimental"] #app>.app-navigation{
+    width:calc(100vw - 20px)!important;
+    bottom:calc(8px + env(safe-area-inset-bottom))!important;
+  }
+  :root[data-layout="experimental"] #dashboard>#training-insights{
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:12px;
+  }
+  :root[data-layout="experimental"] #training-insights .muscle-map{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  }
+  :root[data-layout="experimental"] .page:not(#dashboard){max-width:100%}
+}
+@media(max-width:390px){
+  :root[data-layout="experimental"] #app>main{
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+  :root[data-layout="experimental"] #training-insights .muscle-map{
+    grid-template-columns:1fr;
+  }
+}
