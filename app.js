@@ -81,11 +81,13 @@ async function viewFriend(id){
  try{const {data,error}=await supabase.rpc('fit_get_friend_content',{p_friend_id:id});if(error)throw error;
  const {data:p}=await supabase.from('profiles').select('username,display_name').eq('id',id).single();
  const box=$('friend-content');box.classList.remove('hide');
- const workouts=data.workouts||[],plans=data.diet_plans||[];
+ const workouts=data.workouts||[],plans=data.diet_plans||[],exerciseMap={};
+ (data.workout_exercises||[]).forEach(x=>(exerciseMap[x.session_id]??=[]).push(x.exercise_name));
  box.innerHTML='<h3>@'+safe(p?.username||'')+' — '+safe(p?.display_name||'')+'</h3><h4>Treinos recentes</h4>'+
- (workouts.map(x=>entry('💪 '+x.workout_name,new Date(x.started_at).toLocaleDateString('pt-BR'),x.ended_at?'Finalizado':'Em andamento')).join('')||'<p class="muted small">Nenhum treino registrado.</p>')+
+ (workouts.map(x=>entry('💪 '+x.workout_name,new Date(x.started_at).toLocaleDateString('pt-BR'),(exerciseMap[x.id]||[]).join(' · ')|| (x.ended_at?'Finalizado':'Em andamento'))).join('')||'<p class="muted small">Nenhum treino registrado.</p>')+
+ '<h4>Fichas de treino</h4>'+((data.routines||[]).map(x=>entry('🏋️ '+x.name,(x.exercises||[]).length+' exercícios',(x.exercises||[]).map(y=>y.name).join(' · '))).join('')||'<p class="muted small">Nenhuma ficha cadastrada.</p>')+
  '<h4>Planos alimentares</h4>'+(plans.map(x=>'<div class="entry"><div><b>'+safe(x.name||'Plano alimentar')+'</b><small>'+safe(x.goal||'')+'</small></div><strong>'+safe(x.target_calories||'—')+' kcal</strong></div>').join('')||'<p class="muted small">Nenhum plano ativo.</p>')+
- '<h4>Refeições do plano</h4>'+((data.diet_meals||[]).map(x=>entry(x.meal_name||x.name||'Refeição',x.meal_time||'',x.foods||'')).join('')||'<p class="muted small">Sem refeições cadastradas.</p>');
+ '<h4>Refeições do plano</h4>'+((data.diet_meals||[]).map(x=>entry(x.meal_name||'Refeição',x.meal_time||'',x.foods||'')).join('')||'<p class="muted small">Sem refeições cadastradas.</p>');
  box.scrollIntoView({behavior:'smooth',block:'start'});
  }catch(e){toast(e.message)}
 }
