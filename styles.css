@@ -1271,3 +1271,10 @@ html[data-theme="dark"][data-layout="pages"] .friend-muscle-map .muscle-atlas{--
  html[data-layout="pages"] #app>.app-navigation{top:68px!important;min-height:62px!important;justify-content:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important}
  html[data-layout="pages"] #app>.app-navigation button{min-width:76px!important;min-height:46px!important}
 }
+
+
+/* v52 — registro rápido de sequência e exclusão de treino */
+html[data-layout="pages"] .sequence-actions,html[data-layout="pages"] .quick-record-note{display:grid;gap:7px;margin:14px 0 18px;padding:14px;border:1px solid var(--border,#dce4df);border-radius:16px;background:var(--surface,#fff)}
+html[data-layout="pages"] .sequence-actions small{display:block;text-align:center;color:var(--muted,#718078);font-size:12px}
+html[data-layout="pages"] #delete-workout-from-summary{margin-top:22px}
+html[data-theme="dark"][data-layout="pages"] .sequence-actions,html[data-theme="dark"][data-layout="pages"] .quick-record-note{background:#22292F;border-color:#3C474F}
