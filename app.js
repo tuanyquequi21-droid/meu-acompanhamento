@@ -88,21 +88,24 @@ $('friend-search-form').onsubmit=async e=>{
 async function loadChallenges(){
  const host=$('challenge-list');if(!host||!user)return;
  try{
-  const {data:members,error}=await supabase.from('fit_challenge_members').select('challenge_id,weekly_goal').eq('user_id',user.id);
+  const {data:members,error}=await supabase.from('fit_challenge_members').select('challenge_id,weekly_goal,status').eq('user_id',user.id);
   if(error)throw error;
   if(!members?.length){host.innerHTML='<p class="muted small">Você ainda não participa de desafios. Crie um e convide suas conexões!</p>';return}
   const ids=members.map(x=>x.challenge_id);
   const {data:challenges,error:ce}=await supabase.from('fit_challenges').select('id,title,starts_on,ends_on,created_by').in('id',ids).order('created_at',{ascending:false});
   if(ce)throw ce;
   const cards=await Promise.all((challenges||[]).map(async c=>{
+   const mine=members.find(x=>x.challenge_id===c.id),start=new Date(c.starts_on+'T12:00:00').toLocaleDateString('pt-BR'),end=new Date(c.ends_on+'T12:00:00').toLocaleDateString('pt-BR');
+   if(mine?.status==='pending')return '<article class="challenge-card challenge-invitation"><div class="challenge-card-head"><div><span class="challenge-kicker">VOCÊ FOI CONVIDADO(A)</span><h4>'+safe(c.title)+'</h4><small>'+start+' até '+end+'</small></div><span class="challenge-trophy">🏆</span></div><p class="muted small">Aceite para entrar no ranking e comparar o cumprimento da sua meta semanal com suas conexões.</p><div class="challenge-invitation-actions"><button class="primary" data-challenge-accept="'+c.id+'">Aceitar desafio</button><button class="secondary" data-challenge-decline="'+c.id+'">Agora não</button></div></article>';
    const {data,error:pe}=await supabase.rpc('fit_get_challenge_progress',{p_challenge_id:c.id});if(pe)throw pe;
-   const participants=pe?[]:(data?.members||[]),mine=members.find(x=>x.challenge_id===c.id);
+   const participants=data?.members||[];
    const rows=participants.map((p,i)=>'<div class="challenge-rank-row"><span class="challenge-rank-number">'+(i+1)+'º</span><span class="challenge-rank-person"><b>'+safe(p.display_name||p.username||'Atleta')+(p.user_id===user.id?' (você)':'')+'</b><small>'+p.workout_count+' de '+p.weekly_goal+' treinos · '+p.percentage+'% da meta</small><span class="challenge-meter"><i style="width:'+p.percentage+'%"></i></span></span><strong>'+p.percentage+'%</strong></div>').join('');
-   const start=new Date(c.starts_on+'T12:00:00').toLocaleDateString('pt-BR'),end=new Date(c.ends_on+'T12:00:00').toLocaleDateString('pt-BR');
-   return '<article class="challenge-card"><div class="challenge-card-head"><div><span class="challenge-kicker">DESAFIO ENTRE CONEXÕES</span><h4>'+safe(c.title)+'</h4><small>'+start+' até '+end+'</small></div><span class="challenge-trophy">🏆</span></div><div class="challenge-ranking-title">Ranking por meta cumprida</div>'+(rows||'<p class="muted small">Ainda não há participantes.</p>')+'<label class="challenge-own-goal">Minha meta neste desafio<select data-challenge-goal="'+c.id+'">'+[2,3,4,5,6].map(n=>'<option value="'+n+'" '+(Number(mine?.weekly_goal||3)===n?'selected':'')+'>'+n+' treinos na semana</option>').join('')+'</select></label></article>';
+   return '<article class="challenge-card"><div class="challenge-card-head"><div><span class="challenge-kicker">DESAFIO ENTRE CONEXÕES</span><h4>'+safe(c.title)+'</h4><small>'+start+' até '+end+'</small></div><span class="challenge-trophy">🏆</span></div><div class="challenge-ranking-title">Ranking por meta cumprida</div>'+(rows||'<p class="muted small">Aguardando participantes aceitarem o convite.</p>')+'<label class="challenge-own-goal">Minha meta neste desafio<select data-challenge-goal="'+c.id+'">'+[2,3,4,5,6].map(n=>'<option value="'+n+'" '+(Number(mine?.weekly_goal||3)===n?'selected':'')+'>'+n+' treinos na semana</option>').join('')+'</select></label></article>';
   }));
   host.innerHTML=cards.join('');
   host.querySelectorAll('[data-challenge-goal]').forEach(sel=>sel.onchange=async()=>{try{const {error}=await supabase.from('fit_challenge_members').update({weekly_goal:Number(sel.value)}).eq('challenge_id',sel.dataset.challengeGoal).eq('user_id',user.id);if(error)throw error;toast('Sua meta foi atualizada!');await loadChallenges()}catch(e){toast(e.message)}});
+  host.querySelectorAll('[data-challenge-accept]').forEach(btn=>btn.onclick=async()=>{try{const {error}=await supabase.from('fit_challenge_members').update({status:'accepted'}).eq('challenge_id',btn.dataset.challengeAccept).eq('user_id',user.id);if(error)throw error;toast('Você entrou no desafio! 💪');await loadChallenges()}catch(e){toast(e.message)}});
+  host.querySelectorAll('[data-challenge-decline]').forEach(btn=>btn.onclick=async()=>{try{const {error}=await supabase.from('fit_challenge_members').delete().eq('challenge_id',btn.dataset.challengeDecline).eq('user_id',user.id);if(error)throw error;toast('Convite recusado.');await loadChallenges()}catch(e){toast(e.message)}});
  }catch(e){host.innerHTML='<p class="muted small">Não foi possível carregar os desafios: '+safe(e.message)+'</p>'}
 }
 $('challenge-create-form')?.addEventListener('submit',async e=>{
@@ -116,7 +119,7 @@ $('challenge-create-form')?.addEventListener('submit',async e=>{
   const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   const {data:c,error}=await supabase.from('fit_challenges').insert({created_by:user.id,title,starts_on:iso(monday),ends_on:iso(sunday)}).select('id').single();if(error)throw error;
   const goal=Number($('challenge-own-goal').value||3);
-  const rows=[{challenge_id:c.id,user_id:user.id,weekly_goal:goal},...invited.map(id=>({challenge_id:c.id,user_id:id,weekly_goal:3}))];
+  const rows=[{challenge_id:c.id,user_id:user.id,weekly_goal:goal},...invited.map(id=>({challenge_id:c.id,user_id:id,weekly_goal:3,status:'pending'}))];
   const {error:me}=await supabase.from('fit_challenge_members').insert(rows);if(me){await supabase.from('fit_challenges').delete().eq('id',c.id);throw me}
   e.target.reset();$('challenge-own-goal').value='3';await loadChallenges();toast('Desafio criado e convites enviados! 💪');
  }catch(err){toast(err.message)}finally{button.disabled=false}
