@@ -16,15 +16,35 @@ function watchFriendRequests(){if(friendRealtimeChannel){supabase.removeChannel(
 }
 
 function muscleFigure(side,counts,maxCount){
- const v=(key)=>{const n=counts[key]||0;if(!n)return '#DCE4DF';const t=Math.min(1,n/Math.max(1,maxCount));return t<.34?'#B9E6C9':t<.67?'#55C982':'#168B57'};
- const common='<circle cx="80" cy="27" r="17" fill="#DCE4DF"/><path d="M68 46 Q80 41 92 46 L103 57 99 112 Q80 124 61 112 L57 57Z" fill="#DCE4DF"/><path d="M59 54 Q48 54 43 69 L29 119 Q27 128 35 130 Q42 131 46 122 L63 82Z" fill="#DCE4DF"/><path d="M101 54 Q112 54 117 69 L131 119 Q133 128 125 130 Q118 131 114 122 L97 82Z" fill="#DCE4DF"/><path d="M64 112 L96 112 94 172 89 236 Q87 245 78 245 Q69 245 68 236 L66 172Z" fill="#DCE4DF"/><path d="M65 116 L95 116 91 177 80 177 69 177Z" fill="'+v(side==='front'?'quadriceps':'glutes')+'"/>';
- let overlays='';
+ const color=(key)=>{const n=counts[key]||0;if(!n)return '#D7DDE0';const t=n/Math.max(1,maxCount);return t<.34?'#F4B183':t<.67?'#65B98A':'#168B57'};
+ const skin='#D7DDE0',stroke='#AAB5B9';
+ const body='<g fill="'+skin+'" stroke="'+stroke+'" stroke-width="1.1" stroke-linejoin="round"><circle cx="90" cy="27" r="17"/><path d="M82 43 L98 43 L101 55 L79 55Z"/><path d="M72 52 Q90 46 108 52 L119 68 L113 130 Q110 146 101 151 L79 151 Q70 146 67 130 L61 68Z"/><path d="M67 58 Q55 54 49 67 L32 119 Q28 130 35 134 Q42 137 47 126 L70 82Z"/><path d="M113 58 Q125 54 131 67 L148 119 Q152 130 145 134 Q138 137 133 126 L110 82Z"/><path d="M72 143 Q90 151 108 143 L111 164 Q105 177 90 177 Q75 177 69 164Z"/><path d="M73 165 Q82 171 87 170 L83 241 Q82 253 77 267 L72 300 Q70 308 62 308 L55 308 Q50 305 54 297 L60 265 L62 239 L62 181Z"/><path d="M93 170 Q98 171 107 165 L118 181 L118 239 L120 265 L126 297 Q130 305 125 308 L118 308 Q110 308 108 300 L103 267 Q98 253 97 241Z"/><path d="M54 307 Q63 311 73 307 L74 314 Q69 319 53 318 Q47 317 49 313Z"/><path d="M118 307 Q127 311 130 313 Q132 317 126 318 Q110 319 106 314 L107 307Z"/></g>';
+ let regions='';
  if(side==='front'){
-  overlays='<path d="M61 58 Q80 49 99 58 L96 85 Q80 95 64 85Z" fill="'+v('chest')+'"/><ellipse cx="60" cy="57" rx="10" ry="9" fill="'+v('shoulders')+'"/><ellipse cx="100" cy="57" rx="10" ry="9" fill="'+v('shoulders')+'"/><path d="M48 73 Q55 68 60 78 L53 111 43 119 39 112Z" fill="'+v('biceps')+'"/><path d="M112 73 Q105 68 100 78 L107 111 117 119 121 112Z" fill="'+v('biceps')+'"/><path d="M66 88 Q80 96 94 88 L91 108 Q80 114 69 108Z" fill="'+v('abs')+'"/><path d="M65 116 L79 116 77 177 69 177Z M81 116 L95 116 91 177 83 177Z" fill="'+v('quadriceps')+'"/><path d="M69 180 L78 180 76 232 69 232Z M82 180 L91 180 89 232 82 232Z" fill="'+v('calves')+'"/>';
+  regions='<path d="M68 61 Q90 52 112 61 L107 92 Q90 99 73 92Z" fill="'+color('chest')+'"/><path d="M67 58 Q54 55 51 70 L63 82 73 67Z M113 58 Q126 55 129 70 L117 82 107 67Z" fill="'+color('shoulders')+'"/><path d="M51 75 Q59 71 65 83 L54 119 44 126 40 120Z M129 75 Q121 71 115 83 L126 119 136 126 140 120Z" fill="'+color('biceps')+'"/><path d="M76 98 Q90 103 104 98 L101 139 Q90 146 79 139Z" fill="'+color('abs')+'"/><path d="M73 169 Q81 173 87 171 L83 236 76 258 65 255 67 219Z M93 171 Q99 173 107 169 L113 219 115 255 104 258 97 236Z" fill="'+color('quadriceps')+'"/><path d="M62 265 L76 267 71 300 59 300Z M104 267 L118 265 121 300 109 300Z" fill="'+color('calves')+'"/>';
  }else{
-  overlays='<path d="M59 57 Q80 48 101 57 L97 96 Q80 108 63 96Z" fill="'+v('back')+'"/><ellipse cx="60" cy="57" rx="10" ry="9" fill="'+v('shoulders')+'"/><ellipse cx="100" cy="57" rx="10" ry="9" fill="'+v('shoulders')+'"/><path d="M48 73 Q55 68 60 78 L53 111 43 119 39 112Z M112 73 Q105 68 100 78 L107 111 117 119 121 112Z" fill="'+v('biceps')+'"/><path d="M63 112 Q80 105 97 112 L94 134 Q80 143 66 134Z" fill="'+v('glutes')+'"/><path d="M65 137 L78 137 76 183 68 183Z M82 137 L95 137 92 183 84 183Z" fill="'+v('posterior')+'"/><path d="M68 185 L77 185 75 233 68 233Z M83 185 L92 185 90 233 83 233Z" fill="'+v('calves')+'"/>';
+  regions='<path d="M70 61 Q90 51 110 61 L111 116 Q90 132 69 116Z" fill="'+color('back')+'"/><path d="M67 58 Q54 55 51 70 L63 82 73 67Z M113 58 Q126 55 129 70 L117 82 107 67Z" fill="'+color('shoulders')+'"/><path d="M51 75 Q59 71 65 83 L54 119 44 126 40 120Z M129 75 Q121 71 115 83 L126 119 136 126 140 120Z" fill="'+color('biceps')+'"/><path d="M70 144 Q90 134 110 144 L108 165 Q90 178 72 165Z" fill="'+color('glutes')+'"/><path d="M73 173 Q81 177 87 175 L83 239 76 258 65 255 67 219Z M93 175 Q99 177 107 173 L113 219 115 255 104 258 97 239Z" fill="'+color('posterior')+'"/><path d="M62 265 L76 267 71 300 59 300Z M104 267 L118 265 121 300 109 300Z" fill="'+color('calves')+'"/>';
  }
- return '<svg class="muscle-figure" viewBox="0 0 160 260" role="img" aria-label="Mapa muscular '+(side==='front'?'frontal':'posterior')+'">'+common+overlays+'</svg>';
+ return '<svg class="muscle-figure" viewBox="0 0 180 325" role="img" aria-label="Mapa muscular '+(side==='front'?'frontal':'posterior')+' de uma pessoa">'+body+'<g stroke="#AAB5B9" stroke-width=".8" stroke-linejoin="round">'+regions+'</g></svg>';
+}
+function muscleMapMarkup(exercises){
+ const counts={chest:0,back:0,shoulders:0,biceps:0,glutes:0,quadriceps:0,posterior:0,calves:0,abs:0};
+ for(const ex of exercises||[]){
+  const name=String(ex.exercise_name||ex.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();let keys=[];
+  if(/supino|crucifixo|peck|flexao de braco|chest press/.test(name))keys.push('chest');
+  if(/remada|puxada|pulldown|barra fixa|costas|dorsal/.test(name))keys.push('back');
+  if(/desenvolvimento|elevacao lateral|elevacao frontal|ombro/.test(name))keys.push('shoulders');
+  if(/rosca|biceps|curl/.test(name))keys.push('biceps');
+  if(/glute|elevacao pelvica|hip thrust|coice|kickback|abdutora/.test(name))keys.push('glutes');
+  if(/agachamento|leg press|extensora|passada|avanco|squat/.test(name))keys.push('quadriceps');
+  if(/stiff|flexora|mesa flexora|levantamento terra|deadlift/.test(name))keys.push('posterior');
+  if(/panturrilha|gemeos|calf/.test(name))keys.push('calves');
+  if(/abdominal|prancha|crunch|infra|supra/.test(name))keys.push('abs');
+  keys.forEach(k=>counts[k]++);
+ }
+ const labels={chest:'Peito',back:'Costas',shoulders:'Ombros',biceps:'Bíceps',glutes:'Glúteos',quadriceps:'Quadríceps',posterior:'Posteriores',calves:'Panturrilhas',abs:'Abdômen'};
+ const sorted=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]),max=Math.max(1,...Object.values(counts)),top=sorted.filter(k=>counts[k]>0).slice(0,5);
+ return '<div class="muscle-figures"><div><span>FRENTE</span>'+muscleFigure('front',counts,max)+'</div><div><span>COSTAS</span>'+muscleFigure('back',counts,max)+'</div></div><div class="muscle-focus-list">'+(top.length?top.map(k=>'<div class="muscle-focus-row"><span><i style="background:'+(counts[k]/max>.66?'#168B57':counts[k]/max>.33?'#65B98A':'#F4B183')+'"></i>'+labels[k]+'</span><b>'+counts[k]+' exercícios</b></div>').join(''):'<p class="muted small">Quando houver exercícios identificados, as regiões trabalhadas aparecerão aqui.</p>')+'</div>';
 }
 async function renderTrainingInsights(){
  const host=$('training-insights');if(!host||!user)return;
@@ -40,28 +60,7 @@ async function renderTrainingInsights(){
   const bulb=tube?.querySelector('.thermo-bulb-fill');if(bulb)bulb.style.opacity=String(Math.max(.12,heat/100));
   $('frequency-status').textContent=status;$('frequency-value').textContent=heat+'%';
   $('frequency-detail').textContent=recent.length+' treinos em 28 dias · média de '+avg+'/semana';
-  const counts={chest:0,back:0,shoulders:0,biceps:0,glutes:0,quadriceps:0,posterior:0,calves:0,abs:0};
-  if(ids.length){
-   const {data:exercises,error:ee}=await supabase.from('fit_workout_exercises').select('exercise_name,session_id').in('session_id',ids);
-   if(ee)throw ee;
-   for(const ex of exercises||[]){
-    const name=String(ex.exercise_name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();let keys=[];
-    if(/supino|crucifixo|peck|flexao de braco|chest press/.test(name))keys.push('chest');
-    if(/remada|puxada|pulldown|barra fixa|costas|dorsal/.test(name))keys.push('back');
-    if(/desenvolvimento|elevacao lateral|elevacao frontal|ombro/.test(name))keys.push('shoulders');
-    if(/rosca|biceps|curl/.test(name))keys.push('biceps');
-    if(/glute|elevacao pelvica|hip thrust|coice|kickback|abdutora/.test(name))keys.push('glutes');
-    if(/agachamento|leg press|extensora|passada|avanco|squat/.test(name))keys.push('quadriceps');
-    if(/stiff|flexora|mesa flexora|levantamento terra|deadlift/.test(name))keys.push('posterior');
-    if(/panturrilha|gemeos|calf/.test(name))keys.push('calves');
-    if(/abdominal|prancha|crunch|infra|supra/.test(name))keys.push('abs');
-    keys.forEach(k=>counts[k]++);
-   }
-  }
-  const labels={chest:'Peito',back:'Costas',shoulders:'Ombros',biceps:'Bíceps',glutes:'Glúteos',quadriceps:'Quadríceps',posterior:'Posteriores',calves:'Panturrilhas',abs:'Abdômen'};
-  const sorted=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]),max=Math.max(1,...Object.values(counts));
-  const top=sorted.filter(k=>counts[k]>0).slice(0,4);
-  $('muscle-map').innerHTML='<div class="muscle-figures"><div><span>FRENTE</span>'+muscleFigure('front',counts,max)+'</div><div><span>COSTAS</span>'+muscleFigure('back',counts,max)+'</div></div><div class="muscle-focus-list">'+(top.length?top.map(k=>'<div class="muscle-focus-row"><span><i style="background:'+(counts[k]/max>.66?'#168B57':counts[k]/max>.33?'#55C982':'#B9E6C9')+'"></i>'+labels[k]+'</span><b>'+counts[k]+' exercícios</b></div>').join(''):'<p class="muted small">Quando você concluir treinos com exercícios identificados, seu mapa muscular aparecerá aqui.</p>')+'</div>';
+  $('muscle-map').innerHTML=muscleMapMarkup(exercises||[]);
   $('muscle-legend').innerHTML='<span><i class="legend-low"></i>Menor foco</span><span><i class="legend-mid"></i>Foco médio</span><span><i class="legend-high"></i>Maior foco</span>';
  }catch(e){$('muscle-map').innerHTML='<p class="muted small">Não foi possível montar seu mapa muscular: '+safe(e.message)+'</p>'}
 }
@@ -242,7 +241,10 @@ async function loadFriendProfile(id){
   const gallery=await Promise.all((posts||[]).map(async post=>{const {data:u}=await supabase.storage.from('fit-community').createSignedUrl(post.image_path,3600);return '<article class="profile-post">'+(u?.signedUrl?'<img src="'+u.signedUrl+'" alt="Publicação de '+safe(p.username)+'">':'<div class="profile-post-unavailable">Imagem indisponível</div>')+'<div class="profile-post-caption"><small>'+safe(post.category||'Publicação')+' · '+new Date(post.created_at).toLocaleDateString('pt-BR')+'</small><p>'+safe(post.caption||'')+'</p></div></article>'}));
   host.innerHTML='<div class="social-profile-header"><div class="social-profile-avatar">'+(avatar?'<img src="'+avatar+'" alt="Foto de '+safe(p.display_name||p.username)+'">':safe((p.display_name||p.username||'?').slice(0,1).toUpperCase()))+'</div><div class="social-profile-identity"><h2>'+safe(p.display_name||p.username||'Perfil')+'</h2><p>@'+safe(p.username||'usuário')+'</p><div class="social-profile-bio">'+safe(p.bio||'')+'</div><span class="profile-connection-label">'+(connected?'Sua conexão':'Perfil')+'</span></div></div><div class="profile-posts-heading"><h3>Fotos e publicações</h3><span>'+gallery.length+' '+(gallery.length===1?'publicação':'publicações')+'</span></div>'+(connected?(gallery.length?'<div class="profile-post-grid">'+gallery.join('')+'</div>':'<p class="muted small profile-empty">Esta pessoa ainda não publicou fotos.</p>'):'<p class="muted small profile-empty">As publicações ficam disponíveis para conexões aceitas.</p>');
   if(connected){const {data:content,error:ce}=await supabase.rpc('fit_get_friend_content',{p_friend_id:id});if(ce)throw ce;const workouts=content.workouts||[],routines=content.routines||[];
-   friendRoutineCache=routines;host.innerHTML+='<section class="social-profile-activity"><h3>Atividade de treino</h3>'+(workouts.map(w=>'<div class="entry"><div><b>💪 '+safe(w.workout_name)+'</b><small>'+new Date(w.started_at).toLocaleDateString('pt-BR')+'</small></div><strong>'+(w.ended_at?'Concluído':'Em andamento')+'</strong></div>').join('')||'<p class="muted small">Nenhum treino registrado.</p>')+'<h3>Fichas de treino</h3>'+(routines.map(r=>'<article class="profile-routine-card"><div class="profile-routine-head"><b>🏋️ '+safe(r.name)+'</b><small>'+(r.exercises||[]).length+' exercícios</small></div><div class="profile-routine-actions"><button type="button" class="secondary" data-friend-routine-view="'+r.id+'">Ver treino</button><button type="button" class="secondary" data-friend-routine-copy="'+r.id+'">Copiar ficha</button><button type="button" class="quiet" data-friend-routine-wa="'+r.id+'">WhatsApp</button><button type="button" class="quiet" data-friend-routine-card="'+r.id+'">Card para redes</button></div><div class="profile-routine-details hide" id="friend-routine-details-'+r.id+'">'+(r.exercises||[]).map((x,i)=>'<div class="profile-routine-exercise"><b>'+(i+1)+'. '+safe(x.name)+'</b><small>'+safe(x.sets)+' séries × '+safe(x.reps_label||x.reps)+' repetições · '+safe(x.load??0)+' kg · descanso '+safe(x.rest_label||((x.rest??60)+'s'))+'</small></div>').join('')+'</div></article>').join('')||'<p class="muted small">Nenhuma ficha cadastrada.</p>')+'</section>';
+   friendRoutineCache=routines;
+   const friendExercises=content.workout_exercises||[];
+   host.innerHTML+='<section class="friend-muscle-insight"><div class="insight-heading"><div><span class="insight-kicker">MAPA MUSCULAR</span><h3>Áreas mais trabalhadas</h3></div><span class="insight-icon">🏋️</span></div><p class="insight-subtitle">Distribuição dos exercícios registrados por esta conexão.</p><div class="muscle-map">'+muscleMapMarkup(friendExercises)+'</div><div class="muscle-legend"><span><i class="legend-low"></i>Menor foco</span><span><i class="legend-mid"></i>Foco médio</span><span><i class="legend-high"></i>Maior foco</span></div></section>';
+   host.innerHTML+='<section class="social-profile-activity"><h3>Atividade de treino</h3>'+(workouts.map(w=>'<div class="entry"><div><b>💪 '+safe(w.workout_name)+'</b><small>'+new Date(w.started_at).toLocaleDateString('pt-BR')+'</small></div><strong>'+(w.ended_at?'Concluído':'Em andamento')+'</strong></div>').join('')||'<p class="muted small">Nenhum treino registrado.</p>')+'<h3>Fichas de treino</h3>'+(routines.map(r=>'<article class="profile-routine-card"><div class="profile-routine-head"><b>🏋️ '+safe(r.name)+'</b><small>'+(r.exercises||[]).length+' exercícios</small></div><div class="profile-routine-actions"><button type="button" class="secondary" data-friend-routine-view="'+r.id+'">Ver treino</button><button type="button" class="secondary" data-friend-routine-copy="'+r.id+'">Copiar ficha</button><button type="button" class="quiet" data-friend-routine-wa="'+r.id+'">WhatsApp</button><button type="button" class="quiet" data-friend-routine-card="'+r.id+'">Card para redes</button></div><div class="profile-routine-details hide" id="friend-routine-details-'+r.id+'">'+(r.exercises||[]).map((x,i)=>'<div class="profile-routine-exercise"><b>'+(i+1)+'. '+safe(x.name)+'</b><small>'+safe(x.sets)+' séries × '+safe(x.reps_label||x.reps)+' repetições · '+safe(x.load??0)+' kg · descanso '+safe(x.rest_label||((x.rest??60)+'s'))+'</small></div>').join('')+'</div></article>').join('')||'<p class="muted small">Nenhuma ficha cadastrada.</p>')+'</section>';
    host.querySelectorAll('[data-friend-routine-view]').forEach(b=>b.onclick=()=>document.getElementById('friend-routine-details-'+b.dataset.friendRoutineView)?.classList.toggle('hide'));
    host.querySelectorAll('[data-friend-routine-copy]').forEach(b=>b.onclick=()=>copyFriendRoutine(b.dataset.friendRoutineCopy));
    host.querySelectorAll('[data-friend-routine-wa]').forEach(b=>b.onclick=()=>{const r=friendRoutineCache.find(x=>x.id===b.dataset.friendRoutineWa);if(r)shareRoutineWhatsApp(r)});
