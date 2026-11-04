@@ -13,25 +13,4 @@
 <button type="button" data-page="workout"><span class="nav-icon">↗</span><em>Treinos</em></button>
 <button type="button" data-page="habits"><span class="nav-icon">✳</span><em>Hábitos</em></button>
 <button type="button" data-page="evolution"><span class="nav-icon">⌁</span><em>Evolução</em></button>
-<button type="button" data-page="community"><span class="nav-icon">♡</span><em>Pessoas</em></button></nav></div><div id="toast" role="status"></div><script>
-(function(){
-  function setLayout(layout){
-    if(layout!=='experimental') layout='experimental';
-    document.documentElement.dataset.layout=layout;
-    document.querySelectorAll('[data-layout-choice]').forEach(function(button){
-      button.classList.toggle('selected',button.dataset.layoutChoice===layout);
-      button.setAttribute('aria-pressed',button.dataset.layoutChoice===layout?'true':'false');
-    });
-    try{localStorage.setItem('ma-layout',layout)}catch(error){}
-  }
-  var initial='experimental';
-  try{initial='experimental';localStorage.setItem('ma-layout','experimental')}catch(error){}
-  setLayout(initial);
-  document.addEventListener('click',function(event){
-    var button=event.target.closest('[data-layout-choice]');
-    if(!button)return;
-    event.preventDefault();
-    setLayout(button.dataset.layoutChoice);
-  });
-})();
-</script><script>(function(){function navigate(id){var target=document.getElementById(id);if(!target||!target.classList.contains('page'))return;document.querySelectorAll('#app main .page').forEach(function(p){p.classList.toggle('active',p.id===id)});document.querySelectorAll('#app>.app-navigation [data-page]').forEach(function(b){b.classList.toggle('current',b.dataset.page===id);b.setAttribute('aria-current',b.dataset.page===id?'page':'false')});try{sessionStorage.setItem('ma-current-page',id)}catch(e){}window.scrollTo(0,0);document.dispatchEvent(new CustomEvent('ma:navigate',{detail:{id:id}}))}window.__maNavigate=navigate;document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#app [data-page]');if(!b)return;var id=b.getAttribute('data-page');if(!id)return;e.preventDefault();navigate(id)},true)})();</script><script type="module" src="./app.js?v=50"></script><script type="module" src="./weekly-planner.js?v=50"></script></body></html>
+<button type="button" data-page="community"><span class="nav-icon">♡</span><em>Pessoas</em></button></nav></div><div id="toast" role="status"></div><script>(function(){function navigate(id){var target=document.getElementById(id);if(!target||!target.classList.contains('page'))return;document.querySelectorAll('#app main .page').forEach(function(p){p.classList.toggle('active',p.id===id)});document.querySelectorAll('#app>.app-navigation [data-page]').forEach(function(b){b.classList.toggle('current',b.dataset.page===id);b.setAttribute('aria-current',b.dataset.page===id?'page':'false')});try{sessionStorage.setItem('ma-current-page',id)}catch(e){}window.scrollTo(0,0);document.dispatchEvent(new CustomEvent('ma:navigate',{detail:{id:id}}))}window.__maNavigate=navigate;document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#app [data-page]');if(!b)return;var id=b.getAttribute('data-page');if(!id)return;e.preventDefault();navigate(id)},true)})();</script><script type="module" src="./app.js?v=50"></script><script type="module" src="./weekly-planner.js?v=50"></script></body></html>
