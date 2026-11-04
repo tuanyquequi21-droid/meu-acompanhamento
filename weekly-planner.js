@@ -235,7 +235,7 @@ $('weekly-task-form')?.addEventListener('submit',async e=>{
     await refreshData(); toast('Tarefa de preparo adicionada.');
   } catch (err) { toast(err.message); }
 });
-document.querySelectorAll('[data-page="weekly"]').forEach(btn => btn.addEventListener('click',()=>setTimeout(()=>renderSelectedDay(),0)));
+document.addEventListener('ma:navigate',event=>{if(event.detail?.id==='weekly')setTimeout(()=>renderSelectedDay(),0)});
 // Reavalia o horário enquanto o painel permanece aberto.
 setInterval(renderHome, 30000);
 supabase.auth.onAuthStateChange((_event,session)=>{
