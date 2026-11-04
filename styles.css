@@ -1225,3 +1225,49 @@ html[data-theme="dark"][data-layout="pages"] .page .card,html[data-theme="dark"]
 html[data-theme="dark"][data-layout="pages"] input,html[data-theme="dark"][data-layout="pages"] select,html[data-theme="dark"][data-layout="pages"] textarea{background:#171C20!important;color:#F3F5F6!important;border-color:#4A555D!important}
 html[data-theme="dark"][data-layout="pages"] .page .muted,html[data-theme="dark"][data-layout="pages"] .page small{color:#B2BCC2!important}
 @media(max-width:760px){html[data-layout="pages"] #app>.app-navigation{justify-content:flex-start!important;top:60px!important;min-height:58px;padding:6px 9px!important;gap:5px!important}html[data-layout="pages"] #app>.app-navigation button{min-width:72px!important;padding:0 9px!important;gap:5px!important}html[data-layout="pages"] #app>.app-navigation button em{font-size:10px!important}html[data-layout="pages"] #app>main{padding:17px 13px 48px!important}html[data-layout="pages"] #dashboard .shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))!important}html[data-layout="pages"] #dashboard #training-insights{grid-template-columns:1fr!important}}
+
+
+/* v51 — menu sempre visível acima do conteúdo e paleta multicolorida */
+html[data-layout="pages"] #app{display:flex!important;flex-direction:column!important}
+html[data-layout="pages"] #app>.app-topbar{order:0!important;flex:0 0 auto}
+html[data-layout="pages"] #app>.app-navigation{
+ order:1!important;flex:0 0 auto!important;position:sticky!important;top:68px!important;
+ z-index:500!important;align-self:stretch!important;min-height:66px!important;
+ box-shadow:0 5px 18px rgba(36,45,51,.10)!important;
+}
+html[data-layout="pages"] #app>main{order:2!important;position:relative!important;z-index:1!important}
+html[data-layout="pages"] #app>.app-navigation button{pointer-events:auto!important;opacity:1!important}
+html[data-layout="pages"] #app>.app-navigation button:nth-child(1) .nav-icon{background:#E8E4F8!important;color:#6D55B5!important}
+html[data-layout="pages"] #app>.app-navigation button:nth-child(2) .nav-icon{background:#E2EFFB!important;color:#3978B8!important}
+html[data-layout="pages"] #app>.app-navigation button:nth-child(3) .nav-icon{background:#FCE9D9!important;color:#C16B27!important}
+html[data-layout="pages"] #app>.app-navigation button:nth-child(4) .nav-icon{background:#DFF3F4!important;color:#27858A!important}
+html[data-layout="pages"] #app>.app-navigation button:nth-child(5) .nav-icon{background:#F8E2E5!important;color:#BD5968!important}
+html[data-layout="pages"] #app>.app-navigation button:nth-child(6) .nav-icon{background:#F2E6F7!important;color:#9659A9!important}
+html[data-layout="pages"] #app>.app-navigation button:nth-child(7) .nav-icon{background:#E2EEE7!important;color:#25845A!important}
+html[data-layout="pages"] #app>.app-navigation button:nth-child(8) .nav-icon{background:#FCE6ED!important;color:#C04E79!important}
+html[data-layout="pages"] #app>.app-navigation button.current{background:#F5F0E9!important;border-color:#E8D6C3!important;color:#30383F!important}
+html[data-layout="pages"] #app>.app-navigation button.current .nav-icon{filter:saturate(1.25)}
+html[data-layout="pages"] #dashboard .stat.lilac{background:#EDE8FA!important}
+html[data-layout="pages"] #dashboard .stat.blue{background:#E2EFFB!important}
+html[data-layout="pages"] #dashboard .stat.peach{background:#FCE8DA!important}
+html[data-layout="pages"] #dashboard .stat.mint{background:#E2F1E8!important}
+html[data-layout="pages"] #dashboard .stat.lilac span{color:#7057B5!important}
+html[data-layout="pages"] #dashboard .stat.blue span{color:#3978B8!important}
+html[data-layout="pages"] #dashboard .stat.peach span{color:#C16B27!important}
+html[data-layout="pages"] #dashboard .stat.mint span{color:#25845A!important}
+html[data-layout="pages"] #dashboard .shortcuts button:nth-child(1) .shortcut-icon{background:#FCE8DA!important;color:#C16B27!important}
+html[data-layout="pages"] #dashboard .shortcuts button:nth-child(2) .shortcut-icon{background:#DFF3F4!important;color:#27858A!important}
+html[data-layout="pages"] #dashboard .shortcuts button:nth-child(3) .shortcut-icon{background:#EDE8FA!important;color:#7057B5!important}
+html[data-layout="pages"] #dashboard .shortcuts button:nth-child(4) .shortcut-icon{background:#F8E2E5!important;color:#BD5968!important}
+html[data-layout="pages"] .friend-muscle-map{width:100%;max-width:620px;margin:10px auto}
+html[data-layout="pages"] .friend-muscle-map .muscle-atlas{width:100%;--bm-max-height:390px;--bm-max-width:280px;--bm-max-width-both:620px;--bm-region-stroke:#7C8982;--bm-region-stroke-width:.45;--bm-background-fill:#DDE3DF;--bm-background-opacity:.15}
+html[data-layout="pages"] .friend-muscle-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 14px;font-size:10px}
+html[data-layout="pages"] .friend-muscle-legend span{display:inline-flex;align-items:center;gap:6px}
+html[data-layout="pages"] .friend-muscle-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+html[data-theme="dark"][data-layout="pages"] #app>.app-navigation{background:#22292F!important;border-color:#3C474F!important}
+html[data-theme="dark"][data-layout="pages"] #app>.app-navigation button.current{background:#493526!important;color:#FFD0A4!important}
+html[data-theme="dark"][data-layout="pages"] .friend-muscle-map .muscle-atlas{--bm-region-stroke:#8FA196;--bm-background-fill:#34453B}
+@media(max-width:760px){
+ html[data-layout="pages"] #app>.app-navigation{top:60px!important;min-height:62px!important;justify-content:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important}
+ html[data-layout="pages"] #app>.app-navigation button{min-width:76px!important;min-height:46px!important}
+}
