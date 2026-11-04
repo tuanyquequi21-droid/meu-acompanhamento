@@ -232,3 +232,16 @@ header .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 :root[data-layout="experimental"][data-theme="dark"] .home-hero{background:linear-gradient(125deg,#29252f,#3b3546)}
 .theme-choice button.selected{outline:2px solid currentColor;outline-offset:2px}
 @media(max-width:390px){:root[data-layout="experimental"] .home-hero{padding:20px 18px}:root[data-layout="experimental"] .hero-mark{display:none}}
+
+:root[data-theme="dark"] .stat,
+:root[data-theme="dark"] .weekly-home-row,
+:root[data-theme="dark"] .home-current-meal,
+:root[data-theme="dark"] .weekly-meal,
+:root[data-theme="dark"] .weekly-tomorrow{background-color:#252525!important;color:#f3f3f3!important}
+:root[data-theme="dark"] .stat span,
+:root[data-theme="dark"] .stat small{color:#c4c4c4!important}
+:root[data-theme="dark"] .stat b{color:#fff!important}
+:root[data-theme="dark"] .home-current-head span{background:#383838!important}
+:root[data-theme="dark"] .weekly-meal li,
+:root[data-theme="dark"] .home-current-meal li,
+:root[data-theme="dark"] .diet-meal li{color:#ededed!important}
