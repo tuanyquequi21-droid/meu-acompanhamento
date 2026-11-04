@@ -58,20 +58,26 @@ document.querySelectorAll('[data-theme-choice]').forEach(b=>b.onclick=async()=>{
 $('friend-search-form').onsubmit=async e=>{
  e.preventDefault();const term=$('friend-search').value.trim().replace(/^@/,'').toLowerCase();if(!term)return;
  try{const {data,error}=await supabase.from('profiles').select('id,username,display_name,bio,avatar_path').eq('username',term).neq('id',user.id).limit(1);if(error)throw error;
- $('friend-search-results').innerHTML=(data||[]).map(p=>'<div class="entry"><div><b>@'+safe(p.username)+'</b><small>'+safe(p.display_name||'')+'</small></div><button class="secondary" data-add-friend="'+p.id+'">Adicionar</button></div>').join('')||'<p class="muted small">Nenhum usuário cadastrado com esse nome exato. Confira a grafia e tente novamente.</p>';
- $('friend-search-results').querySelectorAll('[data-add-friend]').forEach(b=>b.onclick=async()=>{try{const p=data.find(x=>x.id===b.dataset.addFriend);const {error}=await supabase.rpc('fit_send_friend_request',{p_username:p.username});if(error)throw error;toast('Solicitação enviada!');b.disabled=true;b.textContent='Enviada'}catch(e){toast(e.message)}});
+ const found=data?.[0];
+ if(!found){$('friend-search-results').innerHTML='<p class="muted small">Nenhum usuário cadastrado com esse nome exato. Confira a grafia e tente novamente.</p>';return}
+ const {data:relation,error:re}=await supabase.from('fit_friendships').select('requester_id,addressee_id,status').or('and(requester_id.eq.'+user.id+',addressee_id.eq.'+found.id+'),and(requester_id.eq.'+found.id+',addressee_id.eq.'+user.id+')').maybeSingle();if(re)throw re;
+ let action=relation?.status==='accepted'?'Vocês já são conexões':relation?.status==='pending'?(relation.requester_id===user.id?'Solicitação já enviada':'Essa pessoa já enviou uma solicitação para você'):'Adicionar';
+ $('friend-search-results').innerHTML='<div class="entry"><div><b>@'+safe(found.username)+'</b><small>'+safe(found.display_name||'')+(found.bio?' · '+safe(found.bio):'')+'</small></div><button class="secondary" id="add-found-user" '+(relation?'disabled':'')+'>'+action+'</button></div>';
+ $('add-found-user')?.addEventListener('click',async()=>{try{const {error}=await supabase.rpc('fit_send_friend_request',{p_username:found.username});if(error)throw error;toast('Solicitação enviada!');$('add-found-user').disabled=true;$('add-found-user').textContent='Solicitação enviada';await loadCommunity()}catch(e){toast(e.message)}});
  }catch(e){toast(e.message)}
 };
 async function loadCommunity(){
  try{
   const {data:rels,error}=await supabase.from('fit_friendships').select('*').or('requester_id.eq.'+user.id+',addressee_id.eq.'+user.id).order('created_at',{ascending:false});if(error)throw error;
   const incoming=(rels||[]).filter(x=>x.addressee_id===user.id&&x.status==='pending');
+  const outgoing=(rels||[]).filter(x=>x.requester_id===user.id&&x.status==='pending');
   const ids=(rels||[]).filter(x=>x.status==='accepted').map(x=>x.requester_id===user.id?x.addressee_id:x.requester_id);
-  const incomingIds=incoming.map(x=>x.requester_id);const all=[...new Set([...ids,...incomingIds])];
+  const incomingIds=incoming.map(x=>x.requester_id);const outgoingIds=outgoing.map(x=>x.addressee_id);const all=[...new Set([...ids,...incomingIds,...outgoingIds])];
   const {data:profiles,error:pe}=all.length?await supabase.from('profiles').select('id,username,display_name').in('id',all):{data:[],error:null};if(pe)throw pe;
   const byId=Object.fromEntries((profiles||[]).map(x=>[x.id,x]));
   $('friend-requests').innerHTML=incoming.map(x=>{const p=byId[x.requester_id]||{};return '<div class="entry"><div><b>@'+safe(p.username||'usuário')+'</b><small>'+safe(p.display_name||'')+'</small></div><span><button class="primary" data-accept="'+x.id+'">Aceitar</button> <button class="secondary" data-decline="'+x.id+'">Recusar</button></span></div>'}).join('')||'Nenhuma solicitação pendente.';
   $('friend-requests').querySelectorAll('[data-accept],[data-decline]').forEach(b=>b.onclick=async()=>{try{const {error}=await supabase.rpc('fit_answer_friend_request',{p_request_id:b.dataset.accept||b.dataset.decline,p_accept:!!b.dataset.accept});if(error)throw error;await loadCommunity();toast('Solicitação atualizada.')}catch(e){toast(e.message)}});
+  $('friend-sent-requests').innerHTML=outgoing.map(x=>{const p=byId[x.addressee_id]||{};return '<div class="entry"><div><b>@'+safe(p.username||'usuário')+'</b><small>Aguardando resposta</small></div><span class="muted small">Pendente</span></div>'}).join('')||'Você não tem solicitações enviadas pendentes.';
   $('friend-list').innerHTML=ids.map(id=>{const p=byId[id]||{};return '<div class="entry"><div><b>@'+safe(p.username||'usuário')+'</b><small>'+safe(p.display_name||'')+'</small></div><button class="secondary" data-view-friend="'+id+'">Ver treinos e dieta</button></div>'}).join('')||'Você ainda não tem conexões.';
   $('friend-list').querySelectorAll('[data-view-friend]').forEach(b=>b.onclick=()=>viewFriend(b.dataset.viewFriend));
   await loadProgressFeed();
