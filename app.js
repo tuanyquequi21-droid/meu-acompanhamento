@@ -3,8 +3,7 @@ function watchFriendRequests(){if(friendRealtimeChannel){supabase.removeChannel(
  const host=$('motivation-card');if(!host||!user)return;
  try{
   const goalKey='ma-weekly-workout-goal-'+user.id;let goal=Number(localStorage.getItem(goalKey)||3);if(![2,3,4,5,6].includes(goal))goal=3;
-  const since=new Date();since.setDate(since.getDate()-210);
-  const {data,error}=await supabase.from('fit_workout_sessions').select('id,started_at,ended_at').eq('user_id',user.id).not('ended_at','is',null).gte('started_at',since.toISOString()).order('started_at',{ascending:false});
+  const {data,error}=await supabase.from('fit_workout_sessions').select('id,started_at,ended_at').eq('user_id',user.id).not('ended_at','is',null).order('started_at',{ascending:false}).limit(1000);
   if(error)throw error;const sessions=data||[];
   const now=new Date(),weekStart=new Date(now.getFullYear(),now.getMonth(),now.getDate());weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));weekStart.setHours(0,0,0,0);
   const weekCount=sessions.filter(x=>new Date(x.started_at)>=weekStart).length,total=sessions.length,points=total*10,level=Math.floor(points/50)+1,levelProgress=points%50;
@@ -114,7 +113,7 @@ async function copyRoutineText(r){
 function shareRoutineWhatsApp(r){window.open('https://wa.me/?text='+encodeURIComponent(routineShareText(r)),'_blank','noopener,noreferrer')}
 async function copyFriendRoutine(id){
  const r=friendRoutineCache.find(x=>x.id===id);if(!r)return;
- try{const {error}=await supabase.from('fit_workout_routines').insert({space_id:space,user_id:user.id,name:r.name+' (cópia)',exercises:r.exercises||[]});if(error)throw error;toast('Ficha copiada para suas fichas!')}
+ try{const {error}=await supabase.from('fit_workout_routines').insert({space_id:space,user_id:user.id,name:r.name+' (cópia)',exercises:r.exercises||[]});if(error)throw error;await loadWorkoutRoutines();toast('Ficha copiada para suas fichas!')}
  catch(e){toast('Não foi possível copiar: '+e.message)}
 }
 async function shareRoutineCard(r){
