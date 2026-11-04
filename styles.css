@@ -569,3 +569,11 @@ header .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
  :root[data-layout="experimental"][data-theme="dark"] #app>.app-topbar{background:rgba(33,30,45,.96)!important}
  :root[data-layout="experimental"][data-theme="dark"] #app>.app-navigation{background:rgba(33,30,45,.97)!important}
 }
+
+/* Dashboard: ordem explícita dos blocos no desktop */
+@media(min-width:760px){
+ :root[data-layout="experimental"] #dashboard>*{grid-column:1/-1}
+ :root[data-layout="experimental"] #dashboard>:nth-child(6){grid-column:1!important;grid-row:7}
+ :root[data-layout="experimental"] #dashboard>:nth-child(7){grid-column:2!important;grid-row:7}
+ :root[data-layout="experimental"] #dashboard>:nth-child(8){grid-column:2!important;grid-row:8}
+}
