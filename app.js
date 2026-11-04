@@ -117,4 +117,4 @@ async function loadProgressFeed(){
  $('progress-feed').innerHTML=cards.join('')||'<p class="muted small">Suas fotos aparecerão aqui.</p>';
 }
 function applyLayout(){document.documentElement.dataset.layout='experimental';try{localStorage.setItem('ma-layout','experimental')}catch(e){}}applyLayout();
-supabase.auth.onAuthStateChange((_e,s)=>{if(s){user=s.user;loadApp()}else{user=null;space=null;screen('auth')}});const {data:{session}}=await supabase.auth.getSession();if(session){user=session.user;await loadApp()}else screen('auth');if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(console.error);
+supabase.auth.onAuthStateChange((_e,s)=>{if(s){user=s.user;loadApp()}else{if(friendRealtimeChannel){supabase.removeChannel(friendRealtimeChannel);friendRealtimeChannel=null}user=null;space=null;screen('auth')}});const {data:{session}}=await supabase.auth.getSession();if(session){user=session.user;await loadApp()}else screen('auth');if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(console.error);
