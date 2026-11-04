@@ -484,3 +484,88 @@ header .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
  :root[data-layout="experimental"] .card{padding:17px;border-radius:17px}
  :root[data-layout="experimental"] .page>h2{font-size:26px}
 }
+
+/* V31 — estrutura renovada do aplicativo */
+:root[data-layout="experimental"]{--shell-bg:#f6f7fb;--shell-ink:#20243a;--shell-muted:#85899e;--shell-accent:#6655d9}
+:root[data-layout="experimental"] body{background:var(--shell-bg)!important;color:var(--shell-ink)}
+:root[data-layout="experimental"] #app{display:grid;grid-template-columns:252px minmax(0,1fr);grid-template-rows:76px minmax(0,1fr);min-height:100vh}
+:root[data-layout="experimental"] #app>.app-topbar{grid-column:1/-1;grid-row:1;position:sticky;top:0;height:76px;padding:0 34px 0 280px;display:flex;align-items:center;justify-content:space-between;background:#fff!important;border-bottom:1px solid #eaecf3;box-shadow:none;z-index:25}
+:root[data-layout="experimental"] .topbar-brand{display:flex;align-items:center;gap:12px}
+:root[data-layout="experimental"] .brand-symbol{display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:#eeeaff;color:#6655d9;font-size:23px}
+:root[data-layout="experimental"] .topbar-brand b{display:block;font-size:15px;color:#292d45;letter-spacing:-.3px}
+:root[data-layout="experimental"] .topbar-brand small{display:block;margin-top:3px;color:#9296a8;font-size:11px}
+:root[data-layout="experimental"] .topbar-actions{display:flex;align-items:center;gap:18px}
+:root[data-layout="experimental"] .topbar-caption{font-size:9px;font-weight:900;letter-spacing:1.7px;color:#aaa5bd}
+:root[data-layout="experimental"] #app>.app-navigation{grid-column:1;grid-row:2;position:fixed;inset:76px auto 0 0;width:252px;height:calc(100vh - 76px);padding:25px 16px;display:flex;flex-direction:column;align-items:stretch;gap:7px;background:#fff!important;border:0;border-right:1px solid #eaecf3;border-radius:0;box-shadow:none;overflow-y:auto;z-index:22}
+:root[data-layout="experimental"] #app>.app-navigation:before{content:"MENU PRINCIPAL";position:static;white-space:normal;margin:5px 13px 12px;color:#a2a5b5;font-size:9px;font-weight:900;letter-spacing:1.5px}
+:root[data-layout="experimental"] .app-navigation button{width:100%;max-width:none;min-height:48px;flex:none;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:13px;padding:0 14px;border:0;border-radius:13px;background:transparent;color:#777d93;text-align:left;font-size:12px;font-weight:750}
+:root[data-layout="experimental"] .app-navigation button .nav-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:#f5f5fa;color:#777d93;font-size:19px}
+:root[data-layout="experimental"] .app-navigation button em{font-style:normal}
+:root[data-layout="experimental"] .app-navigation button.current{background:#f0edff;color:#5e4bc9}
+:root[data-layout="experimental"] .app-navigation button.current .nav-icon{background:#e4defe;color:#5e4bc9}
+:root[data-layout="experimental"] #app>main{grid-column:2;grid-row:2;width:100%;max-width:1480px;margin:0 auto;padding:30px clamp(20px,3vw,48px) 60px}
+:root[data-layout="experimental"] #dashboard{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.85fr);gap:0 24px;align-content:start}
+:root[data-layout="experimental"] #dashboard>.home-hero{grid-column:1/-1}
+:root[data-layout="experimental"] #dashboard>.home-section-title:first-of-type{grid-column:1/-1}
+:root[data-layout="experimental"] #dashboard>.stats{grid-column:1/-1}
+:root[data-layout="experimental"] #dashboard>.home-section-title:nth-of-type(2){grid-column:1/-1}
+:root[data-layout="experimental"] #dashboard>.shortcuts{grid-column:1/-1}
+:root[data-layout="experimental"] #dashboard>#weekly-home-card{grid-column:1;align-self:start}
+:root[data-layout="experimental"] #dashboard>.home-section-title:last-of-type{grid-column:2;grid-row:7;align-self:end}
+:root[data-layout="experimental"] #dashboard>#recent{grid-column:2;grid-row:8;align-self:start}
+:root[data-layout="experimental"] #dashboard .home-hero{display:flex;align-items:center;justify-content:space-between;gap:24px}
+:root[data-layout="experimental"] #dashboard .home-hero>div:first-child{max-width:650px}
+:root[data-layout="experimental"] #dashboard .home-section-title{margin-top:18px}
+:root[data-layout="experimental"] #dashboard .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+:root[data-layout="experimental"] #dashboard .shortcuts{grid-template-columns:repeat(4,minmax(0,1fr))}
+:root[data-layout="experimental"] .page:not(#dashboard){max-width:1120px;margin:0 auto}
+:root[data-layout="experimental"] .page:not(#dashboard)>h2{margin-bottom:22px}
+:root[data-layout="experimental"] .page:not(#dashboard)>.card,
+:root[data-layout="experimental"] .page:not(#dashboard)>form.card{margin-bottom:18px}
+:root[data-layout="experimental"] .page:not(#dashboard) .card h3{margin-top:0}
+:root[data-layout="experimental"] .page:not(#dashboard)>.eyebrow{margin-top:4px}
+:root[data-layout="experimental"] .page:not(#dashboard) .two{gap:14px}
+:root[data-layout="experimental"] .app-navigation button:focus-visible,
+:root[data-layout="experimental"] #profile:focus-visible{outline:3px solid #b8adff;outline-offset:3px}
+:root[data-layout="experimental"][data-theme="dark"] #app>.app-topbar,
+:root[data-layout="experimental"][data-theme="dark"] #app>.app-navigation{background:#211e2d!important;border-color:#383347}
+:root[data-layout="experimental"][data-theme="dark"] .topbar-brand b{color:#f3efff}
+:root[data-layout="experimental"][data-theme="dark"] .brand-symbol{background:#39304f;color:#e4d9ff}
+:root[data-layout="experimental"][data-theme="dark"] .app-navigation button .nav-icon{background:#302c3e;color:#b6aecb}
+:root[data-layout="experimental"][data-theme="dark"] .app-navigation button.current{background:#39304f;color:#e4d9ff}
+:root[data-layout="experimental"][data-theme="dark"] .app-navigation button.current .nav-icon{background:#4a3e67;color:#e4d9ff}
+@media(max-width:759px){
+ :root[data-layout="experimental"] #app{display:flex;flex-direction:column;min-height:100dvh}
+ :root[data-layout="experimental"] #app>.app-topbar{position:sticky;top:0;z-index:35;height:66px;min-height:66px;padding:0 16px;background:rgba(255,255,255,.94)!important}
+ :root[data-layout="experimental"] .brand-symbol{width:34px;height:34px;border-radius:11px}
+ :root[data-layout="experimental"] .topbar-brand b{font-size:13px}
+ :root[data-layout="experimental"] .topbar-brand small{font-size:10px}
+ :root[data-layout="experimental"] .topbar-caption{display:none}
+ :root[data-layout="experimental"] #app>.app-navigation{position:fixed;inset:auto 9px calc(8px + env(safe-area-inset-bottom)) 9px;width:auto;height:auto;max-width:620px;margin:0 auto;padding:7px 5px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;border:1px solid #e8e2f0;border-radius:20px;background:rgba(255,255,255,.97)!important;box-shadow:0 10px 34px rgba(34,30,68,.16);overflow:visible}
+ :root[data-layout="experimental"] #app>.app-navigation:before{display:none}
+ :root[data-layout="experimental"] .app-navigation button{min-width:0;min-height:52px;padding:3px 0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;border-radius:13px;font-size:8px;line-height:1.05;white-space:nowrap}
+ :root[data-layout="experimental"] .app-navigation button .nav-icon{width:25px;height:24px;border-radius:8px;background:transparent;font-size:18px}
+ :root[data-layout="experimental"] .app-navigation button em{font-style:normal;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+ :root[data-layout="experimental"] #app>main{width:100%;margin:0;padding:17px 14px calc(112px + env(safe-area-inset-bottom))}
+ :root[data-layout="experimental"] #dashboard{display:flex;flex-direction:column;gap:0}
+ :root[data-layout="experimental"] #dashboard .home-hero{min-height:150px;padding:20px 18px;margin-bottom:18px}
+ :root[data-layout="experimental"] #dashboard .hero-mark{width:58px;height:58px;font-size:29px}
+ :root[data-layout="experimental"] #dashboard .home-hero h2{font-size:25px}
+ :root[data-layout="experimental"] #dashboard .home-section-title{margin:18px 2px 11px}
+ :root[data-layout="experimental"] #dashboard .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ :root[data-layout="experimental"] #dashboard .stat{min-height:100px;padding:13px}
+ :root[data-layout="experimental"] #dashboard .stat b{font-size:25px}
+ :root[data-layout="experimental"] #dashboard .shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ :root[data-layout="experimental"] #dashboard .shortcuts button{min-height:108px;padding:12px}
+ :root[data-layout="experimental"] #dashboard #weekly-home-card{order:8}
+ :root[data-layout="experimental"] #dashboard>.home-section-title:last-of-type{order:9}
+ :root[data-layout="experimental"] #dashboard>#recent{order:10}
+ :root[data-layout="experimental"] .page:not(#dashboard){width:100%}
+ :root[data-layout="experimental"] .page:not(#dashboard)>h2{font-size:25px;margin-bottom:16px}
+ :root[data-layout="experimental"] .page:not(#dashboard) .card{margin-bottom:13px}
+ :root[data-layout="experimental"] .page:not(#dashboard)>.card,
+ :root[data-layout="experimental"] .page:not(#dashboard)>form.card{padding:16px}
+ :root[data-layout="experimental"] .app-navigation button.current .nav-icon{background:#e7e1ff}
+ :root[data-layout="experimental"][data-theme="dark"] #app>.app-topbar{background:rgba(33,30,45,.96)!important}
+ :root[data-layout="experimental"][data-theme="dark"] #app>.app-navigation{background:rgba(33,30,45,.97)!important}
+}
