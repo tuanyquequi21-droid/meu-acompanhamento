@@ -30,7 +30,7 @@ async function loadSocialProfile(){
  $('profile-bio').value=p.bio||'';
  $('profile-handle').textContent=p.username?'Seu perfil: @'+p.username:'Escolha um nome de usuário único.';
  $('profile').textContent=(p.display_name||p.username||'U').slice(0,1).toUpperCase();
- if(p.avatar_path){const {data}=await supabase.storage.from('fit-community').createSignedUrl(p.avatar_path,3600);if(data?.signedUrl){$('profile-photo').src=data.signedUrl;$('profile-photo').classList.remove('hide');$('profile-placeholder').classList.add('hide')}}
+ if(p.avatar_path){const {data}=await supabase.storage.from('fit-community').createSignedUrl(p.avatar_path,3600);if(data?.signedUrl){$('profile-photo').src=data.signedUrl;$('profile-photo').classList.remove('hide');$('profile-placeholder').classList.add('hide');$('profile').innerHTML='<img src=\"'+data.signedUrl+'\" alt=\"Perfil\">'}}
 }
 $('save-profile').onclick=async()=>{
  try{
