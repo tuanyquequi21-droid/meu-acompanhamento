@@ -845,3 +845,68 @@ header .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .challenge-invitation{border-style:dashed}
 .challenge-invitation-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .challenge-invitation-actions button{flex:1}
+
+/* SmartGym-inspired visual refresh — mantém estrutura e componentes existentes */
+:root{--sg-bg:#F4F7F5;--sg-surface:#FFFFFF;--sg-soft:#EAF3ED;--sg-ink:#17251D;--sg-muted:#718078;--sg-line:#DDE8E0;--sg-green:#168B57;--sg-green-2:#45C982}
+:root[data-theme="clean"]{--bg:var(--sg-bg);--surface:var(--sg-surface);--surface-2:#F0F5F1;--ink:var(--sg-ink);--muted:var(--sg-muted);--line:var(--sg-line);--accent:var(--sg-green)}
+body{background:var(--bg);color:var(--ink);font-family:Inter,'DM Sans',sans-serif;letter-spacing:-.12px}
+header{border:0;border-bottom:1px solid var(--line);box-shadow:0 3px 18px #163b2408}
+main{max-width:1120px}
+.page>h2{font-size:clamp(26px,4vw,34px);font-weight:800;letter-spacing:-1.1px}
+.card,.insight-card{border:1px solid var(--line);border-radius:22px;box-shadow:0 7px 25px #173b2508}
+.card{padding:20px}
+.primary{background:linear-gradient(135deg,#168B57,#28B66F);box-shadow:0 5px 14px #168B5726}
+.secondary{background:#EAF3ED;color:#176B45}
+.stat{border-radius:19px!important;box-shadow:0 5px 18px #173b2508}
+.home-hero{border-radius:26px;background:linear-gradient(115deg,#13251B,#1C4931 72%,#24784B);box-shadow:0 14px 32px #123d2725}
+.home-hero h2{font-weight:800;letter-spacing:-1.2px}
+.shortcuts button{border-radius:19px;transition:transform .18s ease,box-shadow .18s ease}
+.shortcuts button:active{transform:scale(.98)}
+nav{box-shadow:0 -5px 24px #173b2508}
+nav button.current span{background:#E2F4E9;color:#168B57}
+.training-insights{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.35fr);gap:14px;margin:14px 0 26px}
+.insight-card{background:var(--surface);padding:19px;min-width:0}
+.insight-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.insight-heading h3{margin:4px 0 0;font-size:17px;letter-spacing:-.4px}
+.insight-kicker{font-size:9px;letter-spacing:1.5px;font-weight:900;color:var(--sg-green)}
+.insight-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:var(--sg-soft);font-size:20px}
+.frequency-thermometer{display:flex;align-items:center;justify-content:center;gap:20px;padding:18px 4px 4px;min-height:190px}
+.thermo-visual{height:154px;width:42px;position:relative;display:flex;justify-content:center;align-items:flex-start;flex:none}
+.thermo-tube{position:absolute;bottom:22px;width:19px;height:122px;border:4px solid #D5E2D9;border-radius:20px;background:#EDF2EE;overflow:hidden}
+.thermo-fill{position:absolute;bottom:0;left:0;right:0;height:0;background:linear-gradient(0deg,#168B57 0%,#55CA83 48%,#F4B942 78%,#E76B42 100%);border-radius:12px;transition:height .8s ease}
+.thermo-bulb{position:absolute;bottom:0;width:42px;height:42px;border:4px solid #D5E2D9;border-radius:50%;background:#EDF2EE;display:grid;place-items:center;z-index:1}
+.thermo-bulb-fill{width:27px;height:27px;border-radius:50%;background:linear-gradient(135deg,#168B57,#E76B42);opacity:.12;transition:opacity .8s ease}
+.thermo-copy{min-width:0;display:flex;flex-direction:column;gap:6px}
+.thermo-copy>b{font-size:14px}
+.thermo-copy>strong{font:800 29px Manrope;color:var(--sg-green);letter-spacing:-1px}
+.thermo-copy>small{font-size:10px;color:var(--muted);line-height:1.5}
+.thermo-scale{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.thermo-scale span{font-size:9px;color:var(--muted);background:var(--surface-2);padding:5px 7px;border-radius:7px}
+.insight-subtitle{font-size:11px;color:var(--muted);line-height:1.5;margin:8px 0 12px}
+.muscle-map{display:grid;grid-template-columns:minmax(130px,.95fr) minmax(130px,1fr);align-items:center;gap:12px}
+.muscle-figures{display:flex;justify-content:center;gap:8px;min-width:0}
+.muscle-figures>div{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.muscle-figures>div>span{font-size:8px;letter-spacing:1px;font-weight:900;color:var(--muted)}
+.muscle-figure{width:100%;max-width:112px;height:auto;overflow:visible}
+.muscle-focus-list{min-width:0}
+.muscle-focus-row{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:8px 0;border-bottom:1px solid var(--line)}
+.muscle-focus-row:last-child{border-bottom:0}
+.muscle-focus-row span{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700}
+.muscle-focus-row span i{width:9px;height:9px;border-radius:50%;flex:none}
+.muscle-focus-row b{font-size:9px;color:var(--muted);white-space:nowrap}
+.muscle-legend{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:9px}
+.muscle-legend span{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--muted)}
+.muscle-legend i{width:9px;height:9px;border-radius:3px}
+.legend-low{background:#B9E6C9}.legend-mid{background:#55C982}.legend-high{background:#168B57}
+:root[data-theme="dark"]{--sg-bg:#101A14;--sg-surface:#19271F;--sg-soft:#243B2D;--sg-ink:#F0F7F2;--sg-muted:#B0C1B5;--sg-line:#30483A}
+:root[data-theme="dark"] body{background:var(--sg-bg)!important;color:var(--sg-ink)!important}
+:root[data-theme="dark"] .insight-card,:root[data-theme="dark"] .card{background:var(--sg-surface)!important;border-color:var(--sg-line)!important;color:var(--sg-ink)!important}
+:root[data-theme="dark"] .insight-heading h3,:root[data-theme="dark"] .thermo-copy>b,:root[data-theme="dark"] .muscle-focus-row span{color:var(--sg-ink)!important}
+:root[data-theme="dark"] .insight-subtitle,:root[data-theme="dark"] .thermo-copy>small,:root[data-theme="dark"] .muscle-focus-row b,:root[data-theme="dark"] .muscle-figures>div>span,:root[data-theme="dark"] .muscle-legend span{color:var(--sg-muted)!important}
+:root[data-theme="dark"] .insight-icon,:root[data-theme="dark"] .thermo-scale span{background:#243B2D;color:#D8FBE4}
+:root[data-theme="dark"] .thermo-tube,:root[data-theme="dark"] .thermo-bulb{background:#26382D;border-color:#496353}
+:root[data-theme="dark"] .thermo-bulb-fill{background:linear-gradient(135deg,#35C879,#F4B942)}
+:root[data-theme="dark"] .muscle-focus-row{border-color:var(--sg-line)}
+:root[data-theme="dark"] .home-hero{background:linear-gradient(115deg,#14271B,#1B4930 72%,#236D45)!important}
+@media(max-width:760px){.training-insights{grid-template-columns:1fr}.frequency-thermometer{min-height:150px}.muscle-map{grid-template-columns:minmax(125px,.9fr) minmax(130px,1fr)}.insight-card{padding:16px}}
+@media(max-width:370px){.muscle-map{grid-template-columns:1fr}.muscle-figure{max-width:92px}}
