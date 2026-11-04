@@ -4,8 +4,8 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f8f7fc",
-  "theme_color": "#7257df",
+  "background_color": "#F2F4F5",
+  "theme_color": "#30383F",
   "description": "Treinos, alimentação, hidratação e evolução",
   "icons": [
     {
