@@ -1300,3 +1300,8 @@ html[data-layout="pages"] #toast{bottom:82px!important}
 .active-exercise-title,.summary-exercise-title{display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .active-exercise-title h3,.summary-exercise-title h3{margin:0}
 .summary-exercise-title .exercise-thumb,.active-exercise-title .exercise-thumb{width:64px;height:64px;flex-basis:64px}
+
+
+/* Corrige o app aparecendo por trás da tela de autenticação no layout Pages */
+html[data-layout="pages"] #app.hide{display:none!important}
+html[data-layout="pages"] #auth.hide,html[data-layout="pages"] #setup.hide{display:none!important}
