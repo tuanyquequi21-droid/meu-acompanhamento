@@ -10,17 +10,15 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.graphics.Color
-import android.view.View
 import android.view.WindowManager
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
     private lateinit var webView: WebView
     private var fileCallback: ValueCallback<Array<Uri>>? = null
     private val fileRequestCode = 4102
     private val appUrl = "https://tuanyquequi21-droid.github.io/meu-acompanhamento/"
 
+    @Suppress("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = Color.rgb(48, 56, 63)
@@ -56,8 +54,7 @@ class MainActivity : AppCompatActivity() {
                 fileCallback?.onReceiveValue(null)
                 fileCallback = callback
                 return try {
-                    val intent = params.createIntent()
-                    startActivityForResult(intent, fileRequestCode)
+                    startActivityForResult(params.createIntent(), fileRequestCode)
                     true
                 } catch (_: Exception) {
                     fileCallback = null
@@ -67,12 +64,6 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(webView)
         if (savedInstanceState == null) webView.loadUrl(appUrl) else webView.restoreState(savedInstanceState)
-
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (webView.canGoBack()) webView.goBack() else finish()
-            }
-        })
     }
 
     @Deprecated("Deprecated in Android API")
@@ -83,6 +74,11 @@ class MainActivity : AppCompatActivity() {
             fileCallback?.onReceiveValue(result)
             fileCallback = null
         }
+    }
+
+    @Deprecated("Deprecated in Android API")
+    override fun onBackPressed() {
+        if (::webView.isInitialized && webView.canGoBack()) webView.goBack() else super.onBackPressed()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
