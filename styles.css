@@ -1281,10 +1281,10 @@ html[data-theme="dark"][data-layout="pages"] .sequence-actions,html[data-theme="
 
 
 /* v53 — safe areas Android e mapa muscular do treino concluído */
-html[data-layout="pages"] body{min-height:100dvh;padding-top:env(safe-area-inset-top,0px)}
+html[data-layout="pages"] body{min-height:100dvh}
 html[data-layout="pages"] #app{min-height:100dvh}
-html[data-layout="pages"] #app>main{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))!important}
-html[data-layout="pages"] #toast{bottom:calc(82px + env(safe-area-inset-bottom,0px))!important}
+html[data-layout="pages"] #app>main{padding-bottom:58px!important}
+html[data-layout="pages"] #toast{bottom:82px!important}
 .exercise-thumb{overflow:hidden;position:relative}
 .exercise-thumb img{width:100%;height:100%;object-fit:contain;display:block}
 .exercise-thumb .pose-peak{position:absolute;inset:0;opacity:0;transition:opacity .2s;background:#fff}
@@ -1296,3 +1296,7 @@ html[data-layout="pages"] #toast{bottom:calc(82px + env(safe-area-inset-bottom,0
 .summary-muscle-atlas svg{max-width:100%;height:auto}
 .summary-muscle-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:7px 12px;font-size:11px}
 @media(max-width:760px){.summary-muscle-atlas{--bm-max-height:280px;--bm-max-width:190px;--bm-max-width-both:100%}}
+
+.active-exercise-title,.summary-exercise-title{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.active-exercise-title h3,.summary-exercise-title h3{margin:0}
+.summary-exercise-title .exercise-thumb,.active-exercise-title .exercise-thumb{width:64px;height:64px;flex-basis:64px}
