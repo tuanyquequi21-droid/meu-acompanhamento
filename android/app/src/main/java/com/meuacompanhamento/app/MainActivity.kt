@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Build
+import android.view.View
+import android.view.WindowInsets
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
@@ -27,6 +30,20 @@ class MainActivity : Activity() {
 
         webView = WebView(this)
         webView.setBackgroundColor(Color.rgb(242, 244, 245))
+        webView.clipToPadding = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            webView.setOnApplyWindowInsetsListener { view, insets ->
+                val bars = insets.getInsets(WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout())
+                view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+                insets
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            webView.setOnApplyWindowInsetsListener { view, insets ->
+                view.setPadding(insets.systemWindowInsetLeft, insets.systemWindowInsetTop, insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
+                insets
+            }
+        }
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.databaseEnabled = true
