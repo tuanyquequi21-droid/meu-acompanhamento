@@ -1305,3 +1305,13 @@ html[data-layout="pages"] #toast{bottom:82px!important}
 /* Corrige o app aparecendo por trás da tela de autenticação no layout Pages */
 html[data-layout="pages"] #app.hide{display:none!important}
 html[data-layout="pages"] #auth.hide,html[data-layout="pages"] #setup.hide{display:none!important}
+
+/* Login responsivo: o formulário permanece rolável acima do teclado virtual. */
+@media (max-height: 680px) {
+  .auth { justify-content:flex-start; min-height:100dvh; overflow-y:auto; padding-top:max(16px, env(safe-area-inset-top)); padding-bottom:max(24px, env(safe-area-inset-bottom)); }
+  .auth .logo { margin-bottom:14px; flex:0 0 46px; height:46px; width:46px; }
+  .auth h1 { font-size:29px; margin:8px 0; }
+  .auth .muted { margin:6px 0 10px; }
+  .auth .card { margin:8px 0; }
+}
+#auth, #setup { overscroll-behavior:contain; }
