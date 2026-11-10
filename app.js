@@ -44,9 +44,16 @@ function renderMuscleAtlas(exercises){
 async function renderTrainingInsights(){
  const host=$('training-insights');if(!host||!user)return;
  try{
-  const since=new Date();since.setDate(since.getDate()-28);
-  const {data:sessions,error}=await supabase.from('fit_workout_sessions').select('id,started_at,ended_at').eq('user_id',user.id).not('ended_at','is',null).gte('started_at',since.toISOString()).order('started_at',{ascending:false}).limit(500);
-  if(error)throw error;
+  const now=new Date(),yearStart=new Date(now.getFullYear(),0,1),since=new Date();since.setDate(since.getDate()-28);
+  const [{data:sessions,error},{data:annualSessions,error:annualError}]=await Promise.all([
+   supabase.from('fit_workout_sessions').select('id,started_at,ended_at').eq('user_id',user.id).not('ended_at','is',null).gte('started_at',since.toISOString()).order('started_at',{ascending:false}).limit(500),
+   supabase.from('fit_workout_sessions').select('id,started_at,ended_at').eq('user_id',user.id).not('ended_at','is',null).gte('started_at',yearStart.toISOString()).lt('started_at',new Date(now.getFullYear()+1,0,1).toISOString()).order('started_at',{ascending:false}).limit(2000)
+  ]);
+  if(error)throw error;if(annualError)throw annualError;
+  const annualCount=(annualSessions||[]).filter(session=>(new Date(session.ended_at).getTime()-new Date(session.started_at).getTime())>=120000).length;
+  const elapsedWeeks=Math.max(1,(now.getTime()-yearStart.getTime())/(7*24*60*60*1000));
+  const weeklyAverage=annualCount/elapsedWeeks;
+  const heat=Math.min(100,Math.round((weeklyAverage/4)*100));
   const all=(sessions||[]).filter(session=>(new Date(session.ended_at).getTime()-new Date(session.started_at).getTime())>=120000),ids=all.map(x=>x.id);let exercises=[],sets=[];
   if(ids.length){
    const {data:exRows,error:ee}=await supabase.from('fit_workout_exercises').select('id,session_id,exercise_name').in('session_id',ids);if(ee)throw ee;exercises=exRows||[];
@@ -54,12 +61,12 @@ async function renderTrainingInsights(){
   }
   const setsByExercise={},exercisesBySession={};for(const st of sets)(setsByExercise[st.exercise_id]??=[]).push(st);for(const ex of exercises)(exercisesBySession[ex.session_id]??=[]).push(ex);
   const sessionRates=all.map(session=>{const list=exercisesBySession[session.id]||[];if(!list.length)return 0;const rates=list.map(ex=>{const ss=setsByExercise[ex.id]||[];return ss.length?ss.filter(x=>x.completed).length/ss.length:0});return rates.reduce((a,b)=>a+b,0)/rates.length});
-  const heat=sessionRates.length?Math.round(sessionRates.reduce((a,b)=>a+b,0)/sessionRates.length*100):0;
+  const completionAverage=sessionRates.length?Math.round(sessionRates.reduce((a,b)=>a+b,0)/sessionRates.length*100):0;
   const doneExercises=exercises.filter(ex=>(setsByExercise[ex.id]||[]).some(st=>st.completed));
   const status=heat>=85?'Pegando fogo! 🔥':heat>=55?'Quente!':heat>=25?'Aquecendo…':'Começando a esquentar';
   const tube=$('frequency-thermometer');tube?.style.setProperty('--heat',heat+'%');const fill=tube?.querySelector('.thermo-fill');if(fill)fill.style.height=heat+'%';const bulb=tube?.querySelector('.thermo-bulb-fill');if(bulb)bulb.style.opacity=String(Math.max(.12,heat/100));
   $('frequency-status').textContent=status;$('frequency-value').textContent=heat+'%';
-  $('frequency-detail').textContent='Média de conclusão dos exercícios em '+all.length+' treino(s) nos últimos 28 dias · '+doneExercises.length+' exercício(s) com séries concluídas';
+  $('frequency-detail').textContent='Média anual: '+weeklyAverage.toFixed(1).replace('.',',')+' treino(s)/semana · '+annualCount+' treino(s) concluído(s) no ano · meta para encher: 4 por semana. Conclusão dos exercícios nos últimos 28 dias: '+completionAverage+'% ('+doneExercises.length+' exercício(s) com séries concluídas).';
   renderMuscleAtlas(doneExercises);$('muscle-legend').innerHTML='<span><i class="legend-low"></i>Menor foco</span><span><i class="legend-mid"></i>Foco médio</span><span><i class="legend-high"></i>Maior foco</span>';
  }catch(e){$('muscle-map').innerHTML='<p class="muted small">Não foi possível montar seu mapa muscular: '+safe(e.message)+'</p>'}
 }
