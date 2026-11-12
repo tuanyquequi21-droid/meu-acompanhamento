@@ -1372,3 +1372,12 @@ body.summary-open{overflow:hidden}
 #auth .card,#setup .card{flex:0 0 auto;width:100%;box-sizing:border-box}
 #auth input,#setup input{scroll-margin-top:24px;scroll-margin-bottom:180px}
 @media(max-height:650px){#auth,#setup{justify-content:flex-start;padding-top:18px;padding-bottom:210px}#auth .logo,#setup .logo{margin-bottom:12px}#auth h1,#setup h1{font-size:23px}#auth .muted,#setup .muted{margin-top:5px;margin-bottom:8px}}
+
+
+/* Login Android/WebView: acompanha a área realmente visível quando o teclado abre. */
+html,body{min-height:100%;}
+#auth,#setup{height:auto;min-height:var(--auth-viewport-height,100dvh);max-height:var(--auth-viewport-height,100dvh);overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;justify-content:flex-start;padding-top:max(16px,env(safe-area-inset-top));padding-bottom:max(24px,env(safe-area-inset-bottom));scroll-padding-top:20px;scroll-padding-bottom:24px;}
+#auth .card,#setup .card{flex:0 0 auto;width:100%;}
+#auth input,#setup input{scroll-margin-block:28px;}
+#auth input:focus,#setup input:focus{scroll-margin-block:32px;}
+@media(max-height:560px){#auth,#setup{padding-top:10px;padding-bottom:18px}#auth .logo,#setup .logo{margin-bottom:8px}#auth h1,#setup h1{font-size:23px;margin:4px 0}}
