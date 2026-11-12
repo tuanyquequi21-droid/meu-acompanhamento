@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 150" role="img" aria-labelledby="title desc">
+<title id="title">Meu Acompanhamento</title><desc id="desc">Símbolo de barra de musculação, evolução e desempenho em grafite, laranja e verde.</desc>
+<defs>
+ <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffb34f"/><stop offset="1" stop-color="#f05b24"/></linearGradient>
+ <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9be36b"/><stop offset="1" stop-color="#42ad73"/></linearGradient>
+</defs>
+<g transform="translate(6 8)">
+ <circle cx="66" cy="66" r="61" fill="#252d35"/>
+ <circle cx="66" cy="66" r="53" fill="none" stroke="url(#orange)" stroke-width="5" stroke-dasharray="238 95" stroke-linecap="round" transform="rotate(-48 66 66)"/>
+ <g fill="url(#orange)"><rect x="17" y="55" width="9" height="24" rx="3"/><rect x="28" y="47" width="9" height="40" rx="3"/><rect x="95" y="47" width="9" height="40" rx="3"/><rect x="106" y="55" width="9" height="24" rx="3"/><rect x="34" y="61" width="64" height="12" rx="6"/></g>
+ <path d="M43 89h10l10-18 12 25 12-19h10" fill="none" stroke="url(#green)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="150" y="73" fill="#252d35" font-family="Arial,Helvetica,sans-serif" font-size="38" font-weight="800" letter-spacing="-.8">MEU</text>
+<text x="150" y="116" fill="#252d35" font-family="Arial,Helvetica,sans-serif" font-size="37" font-weight="800" letter-spacing="-1.2">ACOMPANHAMENTO</text>
+<path d="M150 130h300" stroke="url(#orange)" stroke-width="5" stroke-linecap="round"/>
+</svg>
