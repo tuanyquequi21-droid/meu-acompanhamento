@@ -13,4 +13,33 @@
 <button type="button" data-page="workout"><span class="nav-icon">↗</span><em>Treinos</em></button>
 <button type="button" data-page="habits"><span class="nav-icon">✳</span><em>Hábitos</em></button>
 <button type="button" data-page="evolution"><span class="nav-icon">⌁</span><em>Evolução</em></button>
-<button type="button" data-page="community"><span class="nav-icon">♡</span><em>Pessoas</em></button></nav></div><div id="toast" role="status"></div><script>(function(){function navigate(id){var target=document.getElementById(id);if(!target||!target.classList.contains('page'))return;document.querySelectorAll('#app main .page').forEach(function(p){p.classList.toggle('active',p.id===id)});document.querySelectorAll('#app>.app-navigation [data-page]').forEach(function(b){b.classList.toggle('current',b.dataset.page===id);b.setAttribute('aria-current',b.dataset.page===id?'page':'false')});try{sessionStorage.setItem('ma-current-page',id)}catch(e){}document.dispatchEvent(new CustomEvent('ma:navigate',{detail:{id:id}}))}window.__maNavigate=navigate;document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#app [data-page]');if(!b)return;var id=b.getAttribute('data-page');if(!id)return;e.preventDefault();navigate(id)},true)})();</script><script type="module" src="./app.js?v=64"></script><script type="module" src="./weekly-planner.js?v=52"></script></body></html>
+<button type="button" data-page="community"><span class="nav-icon">♡</span><em>Pessoas</em></button></nav></div><div id="toast" role="status"></div><script>(function(){function navigate(id){var target=document.getElementById(id);if(!target||!target.classList.contains('page'))return;document.querySelectorAll('#app main .page').forEach(function(p){p.classList.toggle('active',p.id===id)});document.querySelectorAll('#app>.app-navigation [data-page]').forEach(function(b){b.classList.toggle('current',b.dataset.page===id);b.setAttribute('aria-current',b.dataset.page===id?'page':'false')});try{sessionStorage.setItem('ma-current-page',id)}catch(e){}document.dispatchEvent(new CustomEvent('ma:navigate',{detail:{id:id}}))}window.__maNavigate=navigate;document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#app [data-page]');if(!b)return;var id=b.getAttribute('data-page');if(!id)return;e.preventDefault();navigate(id)},true)})();</script><script>
+(function(){
+  function setAuthMode(mode){
+    var signup=mode==='signup', name=document.getElementById('name-wrap'), submit=document.getElementById('auth-submit'), password=document.getElementById('password'), message=document.getElementById('auth-msg');
+    document.querySelectorAll('[data-mode]').forEach(function(button){button.classList.toggle('selected',button.dataset.mode===mode)});
+    if(name)name.classList.toggle('hide',!signup);
+    if(submit)submit.textContent=signup?'Criar conta':'Entrar';
+    if(password)password.autocomplete=signup?'new-password':'current-password';
+    if(message)message.textContent='';
+  }
+  document.addEventListener('click',function(event){
+    var button=event.target.closest&&event.target.closest('[data-mode]');
+    if(button)setAuthMode(button.dataset.mode);
+  },true);
+  document.addEventListener('submit',function(event){
+    if(event.target&&event.target.id==='auth-form'&&!window.__maAuthReady){
+      event.preventDefault();
+      var message=document.getElementById('auth-msg');
+      if(message)message.textContent='O módulo de autenticação não conseguiu carregar. Verifique a conexão e recarregue a página. Nenhum dado foi enviado.';
+    }
+  },true);
+  window.addEventListener('error',function(event){
+    if(event.target&&event.target.tagName==='SCRIPT'&&/app\.js/.test(event.target.src)){
+      var message=document.getElementById('auth-msg');
+      if(message)message.textContent='Falha ao carregar o aplicativo. Confira sua conexão e tente novamente.';
+    }
+  },true);
+})();
+</script>
+<script type="module" src="./app.js?v=65"></script><script type="module" src="./weekly-planner.js?v=52"></script></body></html>
