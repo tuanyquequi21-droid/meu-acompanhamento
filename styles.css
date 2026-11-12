@@ -1315,3 +1315,16 @@ html[data-layout="pages"] #auth.hide,html[data-layout="pages"] #setup.hide{displ
   .auth .card { margin:8px 0; }
 }
 #auth, #setup { overscroll-behavior:contain; }
+
+
+/* Simplificação solicitada: ocultar registros de alimentação/água e gamificação sem apagar dados. */
+#food,#water,
+.app-navigation [data-page="food"],
+.app-navigation [data-page="water"],
+.shortcuts [data-page="food"],
+.shortcuts [data-page="water"],
+.dashboard-water-quick,
+#motivation-card,
+.stat.blue,.stat.peach{display:none!important}
+#dashboard .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+#dashboard .shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}
