@@ -1389,3 +1389,6 @@ html,body{min-height:100%;}
 #auth form,#setup form{padding-bottom:12px;}
 #auth input,#setup input{font-size:16px;min-height:48px;scroll-margin:16px;}
 body.auth-keyboard-open #auth,body.auth-keyboard-open #setup{padding-top:8px!important;}
+
+/* Identidade visual Meu Acompanhamento */
+.auth-logo{display:block;width:76px;height:76px;object-fit:contain;margin:0 0 22px;filter:drop-shadow(0 8px 16px #f0782c24)}.brand-wordmark-wrap{display:flex;flex-direction:column;gap:2px;min-width:0}.brand-wordmark{display:block;width:clamp(174px,48vw,220px);height:auto;max-height:47px;object-fit:contain;object-position:left center}.brand-wordmark-wrap small{display:block;color:var(--muted);font-size:10px;margin-top:1px}
