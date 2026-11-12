@@ -1381,3 +1381,11 @@ html,body{min-height:100%;}
 #auth input,#setup input{scroll-margin-block:28px;}
 #auth input:focus,#setup input:focus{scroll-margin-block:32px;}
 @media(max-height:560px){#auth,#setup{padding-top:10px;padding-bottom:18px}#auth .logo,#setup .logo{margin-bottom:8px}#auth h1,#setup h1{font-size:23px;margin:4px 0}}
+
+
+/* Login mobile: o painel usa a altura real do WebView acima do teclado. */
+#auth,#setup{position:fixed!important;inset-inline:0;top:var(--auth-viewport-offset,0px);width:100%;height:var(--auth-viewport-height,100dvh)!important;min-height:0!important;max-height:none!important;margin:0 auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;justify-content:flex-start!important;padding:18px 20px max(28px,env(safe-area-inset-bottom))!important;}
+#auth .card,#setup .card{margin-inline:0;}
+#auth form,#setup form{padding-bottom:12px;}
+#auth input,#setup input{font-size:16px;min-height:48px;scroll-margin:16px;}
+body.auth-keyboard-open #auth,body.auth-keyboard-open #setup{padding-top:8px!important;}
