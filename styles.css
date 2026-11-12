@@ -1365,3 +1365,10 @@ body.summary-open{overflow:hidden}
  .summary-exercise-title .exercise-thumb{width:48px;height:48px;flex-basis:48px}
 }
 :root[data-layout="experimental"][data-theme="dark"] .workout-summary-head{background:#223329;border-color:#415b4c}
+
+
+/* Login mobile: permite rolar a tela e mantém os campos acima do teclado virtual. */
+#auth,#setup{box-sizing:border-box;min-height:100vh;min-height:100dvh;height:auto;overflow-x:hidden;overflow-y:auto;justify-content:center;padding:24px 20px max(28px,env(safe-area-inset-bottom));overscroll-behavior-y:contain}
+#auth .card,#setup .card{flex:0 0 auto;width:100%;box-sizing:border-box}
+#auth input,#setup input{scroll-margin-top:24px;scroll-margin-bottom:180px}
+@media(max-height:650px){#auth,#setup{justify-content:flex-start;padding-top:18px;padding-bottom:210px}#auth .logo,#setup .logo{margin-bottom:12px}#auth h1,#setup h1{font-size:23px}#auth .muted,#setup .muted{margin-top:5px;margin-bottom:8px}}
