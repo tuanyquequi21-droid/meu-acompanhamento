@@ -39,7 +39,7 @@
       var createClient;
       try{({createClient}=await import('https://esm.sh/@supabase/supabase-js@2.58.0?bundle'))}
       catch(firstError){({createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/+esm'))}
-      var client=createClient('https://iecdvnsvnobpxqnusitw.supabase.co','sb_publishable_WSsAqx4AVJs7LwYlhDiqng_dqCgG3at',{auth:{storage:window.localStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+      var client=createClient('https://iecdvnsvnobpxqnusitw.supabase.co','sb_publishable_WSsAqx4AVJs7LwYlhDiqng_dqCgG3at',{auth:{storage:window.localStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});window.__appDiagnostics?.attach(client,'meu_acompanhamento','68');
       if(document.querySelector('[data-mode].selected')?.dataset.mode==='signup'){
         var name=document.getElementById('display-name')?.value.trim()||'';
         var result=await client.auth.signUp({email:email,password:password,options:{data:{display_name:name}}});
@@ -50,8 +50,11 @@
         var result=await client.auth.signInWithPassword({email:email,password:password});
         if(result.error)throw result.error;
         if(!result.data?.session)throw new Error('O Supabase não retornou uma sessão válida.');
-        if(message)message.textContent='Acesso confirmado. Abrindo seu acompanhamento…';
-        setTimeout(function(){location.reload()},350);
+        var confirmed=await client.auth.getSession();
+        if(confirmed.error)throw confirmed.error;
+        if(!confirmed.data?.session)throw new Error('O acesso foi aceito, mas a sessão não permaneceu salva neste navegador. Verifique se os dados do site estão permitidos.');
+        if(message)message.textContent='Acesso confirmado. Preparando a sessão…';
+        setTimeout(function(){location.reload()},900);
       }
     }catch(error){
       console.error('Autenticação de contingência:',error);
@@ -60,11 +63,21 @@
     }
   },true);
   window.addEventListener('error',function(event){
-    if(event.target&&event.target.tagName==='SCRIPT'&&/app\.js/.test(event.target.src)){
-      var message=document.getElementById('auth-msg');
-      if(message)message.textContent='Falha ao carregar o aplicativo. Confira sua conexão e tente novamente.';
-    }
+    if(window.__maAuthReady)return;
+    var detail=event.message||'Falha ao carregar um recurso do aplicativo.';
+    window.__maBootError=detail;
+    window.__appDiagnostics?.report(new Error(detail),'app_boot','critical');
+    var message=document.getElementById('auth-msg');
+    if(message)message.textContent='O aplicativo não inicializou: '+detail;
   },true);
+  window.addEventListener('unhandledrejection',function(event){
+    if(window.__maAuthReady)return;
+    var detail=event.reason?.message||String(event.reason||'Falha inesperada ao iniciar.');
+    window.__maBootError=detail;
+    window.__appDiagnostics?.report(new Error(detail),'app_boot_promise','critical');
+    var message=document.getElementById('auth-msg');
+    if(message)message.textContent='Falha ao iniciar o aplicativo: '+detail;
+  });;
 })();
 </script>
-<script src="./diagnostics.js?v=1"></script><script type="module" src="./app.js?v=67"></script><script type="module" src="./weekly-planner.js?v=52"></script></body></html>
+<script src="./diagnostics.js?v=1"></script><script type="module" src="./app.js?v=68"></script><script type="module" src="./weekly-planner.js?v=52"></script></body></html>
