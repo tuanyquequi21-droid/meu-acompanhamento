@@ -27,11 +27,36 @@
     var button=event.target.closest&&event.target.closest('[data-mode]');
     if(button)setAuthMode(button.dataset.mode);
   },true);
-  document.addEventListener('submit',function(event){
-    if(event.target&&event.target.id==='auth-form'&&!window.__maAuthReady){
-      event.preventDefault();
-      var message=document.getElementById('auth-msg');
-      if(message)message.textContent='O módulo de autenticação não conseguiu carregar. Verifique a conexão e recarregue a página. Nenhum dado foi enviado.';
+  document.addEventListener('submit',async function(event){
+    if(!event.target||event.target.id!=='auth-form'||window.__maAuthReady)return;
+    event.preventDefault();
+    var form=event.target,button=document.getElementById('auth-submit'),message=document.getElementById('auth-msg');
+    var email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
+    if(!form.reportValidity())return;
+    if(button){button.disabled=true;button.textContent='Conectando…'}
+    if(message)message.textContent='Iniciando autenticação…';
+    try{
+      var createClient;
+      try{({createClient}=await import('https://esm.sh/@supabase/supabase-js@2.58.0?bundle'))}
+      catch(firstError){({createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/+esm'))}
+      var client=createClient('https://iecdvnsvnobpxqnusitw.supabase.co','sb_publishable_WSsAqx4AVJs7LwYlhDiqng_dqCgG3at',{auth:{storage:window.localStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+      if(document.querySelector('[data-mode].selected')?.dataset.mode==='signup'){
+        var name=document.getElementById('display-name')?.value.trim()||'';
+        var result=await client.auth.signUp({email:email,password:password,options:{data:{display_name:name}}});
+        if(result.error)throw result.error;
+        if(message)message.textContent=result.data.session?'Conta criada. Atualizando o aplicativo…':'Conta criada! Confirme seu e-mail e depois entre.';
+        if(result.data.session)setTimeout(function(){location.reload()},500);
+      }else{
+        var result=await client.auth.signInWithPassword({email:email,password:password});
+        if(result.error)throw result.error;
+        if(!result.data?.session)throw new Error('O Supabase não retornou uma sessão válida.');
+        if(message)message.textContent='Acesso confirmado. Abrindo seu acompanhamento…';
+        setTimeout(function(){location.reload()},350);
+      }
+    }catch(error){
+      console.error('Autenticação de contingência:',error);
+      if(message)message.textContent=error?.message||'Não foi possível autenticar. Verifique a conexão.';
+      if(button){button.disabled=false;button.textContent=document.querySelector('[data-mode].selected')?.dataset.mode==='signup'?'Criar conta':'Entrar'}
     }
   },true);
   window.addEventListener('error',function(event){
@@ -42,4 +67,4 @@
   },true);
 })();
 </script>
-<script type="module" src="./app.js?v=65"></script><script type="module" src="./weekly-planner.js?v=52"></script></body></html>
+<script type="module" src="./app.js?v=66"></script><script type="module" src="./weekly-planner.js?v=52"></script></body></html>
