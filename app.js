@@ -101,7 +101,8 @@ function openRoutineBuilder(){routineDraft=[];routinePending=null;sessionStorage
  const {error:d}=await supabase.from('fit_workout_sessions').delete().eq('id',id).eq('space_id',space).eq('user_id',user.id);if(d)throw d;
  if(activeSession?.id===id){activeSession=null;renderWorkoutMode();stopRest();$('rest-timer').classList.add('hide')}
 }
-function closeWorkoutSummary(){const modal=$('workout-summary-modal');if(!modal)return;modal.classList.add('hide');document.body.classList.remove('summary-open')}\nasync function openWorkoutSummary(id){
+function closeWorkoutSummary(){const modal=$('workout-summary-modal');if(!modal)return;modal.classList.add('hide');document.body.classList.remove('summary-open')}
+async function openWorkoutSummary(id){
  const modal=$('workout-summary-modal'),content=$('workout-summary-content');if(!modal||!content)return;if(modal.parentElement!==document.body)document.body.appendChild(modal);modal.classList.remove('hide');document.body.classList.add('summary-open');content.innerHTML='<p class="muted small">Carregando resumo…</p>';
  try{
   const {data:session,error}=await supabase.from('fit_workout_sessions').select('id,workout_name,started_at,ended_at').eq('id',id).eq('space_id',space).eq('user_id',user.id).single();if(error)throw error;
