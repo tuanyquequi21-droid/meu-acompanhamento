@@ -1317,15 +1317,13 @@ html[data-layout="pages"] #auth.hide,html[data-layout="pages"] #setup.hide{displ
 #auth, #setup { overscroll-behavior:contain; }
 
 
-/* Simplificação solicitada: ocultar registros de alimentação/água e gamificação sem apagar dados. */
-#food,#water,
-.app-navigation [data-page="food"],
+/* Alimentação reativada; água e elementos secundários continuam ocultos. */
+#water,
 .app-navigation [data-page="water"],
-.shortcuts [data-page="food"],
 .shortcuts [data-page="water"],
 .dashboard-water-quick,
 #motivation-card,
-.stat.blue,.stat.peach{display:none!important}
+.stat.blue{display:none!important}
 #dashboard .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
 #dashboard .shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}
 
@@ -1392,3 +1390,24 @@ body.auth-keyboard-open #auth,body.auth-keyboard-open #setup{padding-top:8px!imp
 
 /* Identidade visual Meu Acompanhamento */
 .auth-logo{display:block;width:76px;height:76px;object-fit:contain;margin:0 0 22px;filter:drop-shadow(0 8px 16px #f0782c24)}.brand-wordmark-wrap{display:flex;flex-direction:column;gap:2px;min-width:0}.brand-wordmark{display:block;width:clamp(174px,48vw,220px);height:auto;max-height:47px;object-fit:contain;object-position:left center}.brand-wordmark-wrap small{display:block;color:var(--muted);font-size:10px;margin-top:1px}
+
+
+/* Layout desktop real: o app deixa de imitar a largura de um celular. */
+@media (min-width: 900px){
+ html[data-layout="pages"] body{min-width:320px;background:var(--page-bg,#F2F4F5)}
+ html[data-layout="pages"] #app{width:100%;max-width:none!important;min-height:100vh}
+ html[data-layout="pages"] #app>.app-topbar{padding-inline:max(28px,calc((100vw - 1360px)/2))!important}
+ html[data-layout="pages"] #app>.app-navigation{padding-inline:max(24px,calc((100vw - 1360px)/2))!important;justify-content:center!important;gap:12px!important;overflow:visible!important}
+ html[data-layout="pages"] #app>main{max-width:1360px!important;padding:32px 36px 72px!important}
+ html[data-layout="pages"] #dashboard .stats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}
+ html[data-layout="pages"] #dashboard .shortcuts{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+ html[data-layout="pages"] #dashboard #training-insights{grid-template-columns:minmax(300px,.85fr) minmax(0,1.15fr)!important;gap:20px!important}
+ html[data-layout="pages"] #food{display:none!important}
+ html[data-layout="pages"] #food.active{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(320px,.85fr)!important;align-items:start;gap:18px!important}
+ html[data-layout="pages"] #food>h2,html[data-layout="pages"] #food>.eyebrow{grid-column:1/-1}
+ html[data-layout="pages"] #food .diet-card,html[data-layout="pages"] #food #diet-editor{grid-column:1/-1}
+ html[data-layout="pages"] #food #food-form{grid-column:1;}
+ html[data-layout="pages"] #food>h3,html[data-layout="pages"] #food #food-list{grid-column:2}
+ html[data-layout="pages"] .page .card{min-width:0}
+}
+@media (min-width: 1200px){html[data-layout="pages"] #app>main{padding-inline:48px!important}html[data-layout="pages"] #dashboard .home-hero{padding:34px 40px!important}}
