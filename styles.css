@@ -1411,3 +1411,24 @@ body.auth-keyboard-open #auth,body.auth-keyboard-open #setup{padding-top:8px!imp
  html[data-layout="pages"] .page .card{min-width:0}
 }
 @media (min-width: 1200px){html[data-layout="pages"] #app>main{padding-inline:48px!important}html[data-layout="pages"] #dashboard .home-hero{padding:34px 40px!important}}
+
+
+/* Removidos da interface: diário de alimentação e registro de água.
+   O planejamento semanal/cardápio continua disponível. */
+html[data-layout="pages"] #food,
+html[data-layout="pages"] #water,
+html[data-layout="pages"] .app-navigation [data-page="food"],
+html[data-layout="pages"] .app-navigation [data-page="water"],
+html[data-layout="pages"] #dashboard .shortcuts [data-page="food"],
+html[data-layout="pages"] #dashboard .shortcuts [data-page="water"],
+html[data-layout="pages"] #dashboard .dashboard-water-quick,
+html[data-layout="pages"] #dashboard .stat.blue,
+html[data-layout="pages"] #dashboard .stat.peach {
+  display: none !important;
+}
+html[data-layout="pages"] #dashboard .stats {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+html[data-layout="pages"] #dashboard .shortcuts {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
