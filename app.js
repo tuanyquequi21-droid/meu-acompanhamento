@@ -80,7 +80,7 @@ function startRest(seconds=restRemaining){if(restInterval){clearInterval(restInt
 document.querySelectorAll('[data-rest]').forEach(b=>b.onclick=()=>startRest(Number(b.dataset.rest)));
 $('timer-toggle').onclick=()=>{if(restEndsAt){stopRest()}else startRest(restRemaining||60)};
 $('timer-stop').onclick=()=>{stopRest();nativeRestCall('stop');restRemaining=0;restFinishedNotified=false;updateTimer();$('rest-timer').classList.add('hide')};
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncNativeRestTimer();if(activeSession)tickSession()}});
+window.__maSyncRestTimer=syncNativeRestTimer;window.addEventListener('pageshow',()=>syncNativeRestTimer());document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncNativeRestTimer();if(activeSession)tickSession()}});
 window.addEventListener('ma:notification-permission-denied',()=>toast('Permita notificacoes para ver o descanso fora do aplicativo.'));
 
 async function loadActiveSession(){const {data,error}=await supabase.from('fit_workout_sessions').select('*').eq('space_id',space).eq('user_id',user.id).is('ended_at',null).order('started_at',{ascending:false}).limit(1).maybeSingle();if(error)throw error;activeSession=data||null;renderWorkoutMode()}
