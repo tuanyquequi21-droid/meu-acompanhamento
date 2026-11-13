@@ -66,6 +66,7 @@ class RestTimerService : Service() {
     }
 
     private fun pauseTimer() {
+        if (!running && remaining <= 0L) { stopTimer(); return }
         if (running) remaining = ((endAt - System.currentTimeMillis() + 999L) / 1000L).coerceAtLeast(0L)
         running = false
         handler.removeCallbacks(ticker)
@@ -129,6 +130,7 @@ class RestTimerService : Service() {
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setCategory(NotificationCompat.CATEGORY_STOPWATCH)
+            .setContentIntent(appPendingIntent())
             .addAction(android.R.drawable.ic_media_pause, "Pausar", servicePendingIntent(ACTION_PAUSE, 1))
             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Encerrar", servicePendingIntent(ACTION_STOP, 2))
         if (Build.VERSION.SDK_INT >= 24) builder.setWhen(endAt).setUsesChronometer(true).setChronometerCountDown(true)
@@ -144,6 +146,7 @@ class RestTimerService : Service() {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
+            .setContentIntent(appPendingIntent())
             .addAction(android.R.drawable.ic_media_play, "Continuar", servicePendingIntent(ACTION_RESUME, 3))
             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Encerrar", servicePendingIntent(ACTION_STOP, 2))
             .build()
@@ -153,6 +156,11 @@ class RestTimerService : Service() {
     private fun startForegroundCompat(notification: Notification) {
         if (Build.VERSION.SDK_INT >= 34) startForeground(NOTIFICATION_ID, notification, android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
         else startForeground(NOTIFICATION_ID, notification)
+    }
+
+    private fun appPendingIntent(): PendingIntent {
+        val intent = Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        return PendingIntent.getActivity(this, 4, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
     private fun servicePendingIntent(action: String, requestCode: Int): PendingIntent {
