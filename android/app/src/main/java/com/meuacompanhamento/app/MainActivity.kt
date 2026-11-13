@@ -12,6 +12,10 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.webkit.JavascriptInterface
+import android.content.pm.PackageManager
+import android.Manifest
+import org.json.JSONObject
 import android.graphics.Color
 import android.view.WindowManager
 
@@ -20,6 +24,8 @@ class MainActivity : Activity() {
     private var fileCallback: ValueCallback<Array<Uri>>? = null
     private val fileRequestCode = 4102
     private val appUrl = "https://tuanyquequi21-droid.github.io/meu-acompanhamento/"
+    private val notificationPermissionRequest = 4201
+    private var pendingRestSeconds: Int? = null
 
     @Suppress("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +51,7 @@ class MainActivity : Activity() {
             }
         }
         webView.settings.javaScriptEnabled = true
+        webView.addJavascriptInterface(RestTimerBridge(), "AndroidRestTimer")
         webView.settings.domStorageEnabled = true
         webView.settings.databaseEnabled = true
         webView.settings.allowFileAccess = false
@@ -81,6 +88,49 @@ class MainActivity : Activity() {
         }
         setContentView(webView)
         if (savedInstanceState == null) webView.loadUrl(appUrl) else webView.restoreState(savedInstanceState)
+    }
+
+
+    private inner class RestTimerBridge {
+        @JavascriptInterface fun start(seconds: Int) {
+            val safeSeconds = seconds.coerceIn(1, 7200)
+            runOnUiThread {
+                if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    pendingRestSeconds = safeSeconds
+                    requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), notificationPermissionRequest)
+                } else {
+                    launchRestService(RestTimerService.ACTION_START, safeSeconds)
+                }
+            }
+        }
+        @JavascriptInterface fun pause() { runOnUiThread { launchRestService(RestTimerService.ACTION_PAUSE) } }
+        @JavascriptInterface fun resume(seconds: Int) { runOnUiThread { launchRestService(RestTimerService.ACTION_RESUME, seconds.coerceIn(1, 7200)) } }
+        @JavascriptInterface fun stop() { runOnUiThread { pendingRestSeconds = null; launchRestService(RestTimerService.ACTION_STOP) } }
+        @JavascriptInterface fun getState(): String {
+            val prefs = getSharedPreferences(RestTimerService.PREFS, MODE_PRIVATE)
+            val state = prefs.getString("state", "stopped") ?: "stopped"
+            val endAt = prefs.getLong("endAt", 0L)
+            val remaining = if (state == "running") ((endAt - System.currentTimeMillis() + 999L) / 1000L).coerceAtLeast(0L) else prefs.getLong("remaining", 0L)
+            return JSONObject().put("state", state).put("remaining", remaining).toString()
+        }
+    }
+
+    private fun launchRestService(action: String, seconds: Int = 0) {
+        val intent = Intent(this, RestTimerService::class.java).setAction(action).putExtra(RestTimerService.EXTRA_SECONDS, seconds)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(intent) else startService(intent)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == notificationPermissionRequest) {
+            val seconds = pendingRestSeconds
+            pendingRestSeconds = null
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && seconds != null) {
+                launchRestService(RestTimerService.ACTION_START, seconds)
+            } else {
+                webView.evaluateJavascript("window.dispatchEvent(new CustomEvent('ma:notification-permission-denied'))", null)
+            }
+        }
     }
 
     @Deprecated("Deprecated in Android API")
