@@ -153,6 +153,15 @@ class MainActivity : Activity() {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (::webView.isInitialized) {
+            webView.postDelayed({
+                webView.evaluateJavascript("window.__maSyncRestTimer && window.__maSyncRestTimer()", null)
+            }, 250)
+        }
+    }
+
     override fun onDestroy() {
         fileCallback?.onReceiveValue(null)
         webView.destroy()
