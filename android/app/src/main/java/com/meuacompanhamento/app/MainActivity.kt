@@ -108,7 +108,7 @@ class MainActivity : Activity() {
         @JavascriptInterface fun stop() { runOnUiThread { pendingRestSeconds = null; launchRestService(RestTimerService.ACTION_STOP) } }
         @JavascriptInterface fun getState(): String {
             val prefs = getSharedPreferences(RestTimerService.PREFS, MODE_PRIVATE)
-            val state = prefs.getString("state", "stopped") ?: "stopped"
+            val state = prefs.getString("state", "none") ?: "none"
             val endAt = prefs.getLong("endAt", 0L)
             val remaining = if (state == "running") ((endAt - System.currentTimeMillis() + 999L) / 1000L).coerceAtLeast(0L) else prefs.getLong("remaining", 0L)
             return JSONObject().put("state", state).put("remaining", remaining).toString()
